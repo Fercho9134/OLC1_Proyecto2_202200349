@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OperadorRelacional = exports.OperadorAritmetico = exports.TipoDatos = void 0;
+exports.OperadorLogico = exports.OperadorRelacional = exports.OperadorAritmetico = exports.TipoDatos = void 0;
 var TipoDatos;
 (function (TipoDatos) {
     TipoDatos["ENTERO"] = "ENTERO";
@@ -29,3 +29,9 @@ var OperadorRelacional;
     OperadorRelacional[OperadorRelacional["MAYORIGUAL"] = 4] = "MAYORIGUAL";
     OperadorRelacional[OperadorRelacional["MENORIGUAL"] = 5] = "MENORIGUAL";
 })(OperadorRelacional || (exports.OperadorRelacional = OperadorRelacional = {}));
+var OperadorLogico;
+(function (OperadorLogico) {
+    OperadorLogico[OperadorLogico["AND"] = 0] = "AND";
+    OperadorLogico[OperadorLogico["OR"] = 1] = "OR";
+    OperadorLogico[OperadorLogico["NOT"] = 2] = "NOT";
+})(OperadorLogico || (exports.OperadorLogico = OperadorLogico = {}));

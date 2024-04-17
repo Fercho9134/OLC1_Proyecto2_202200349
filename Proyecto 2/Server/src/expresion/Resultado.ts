@@ -31,3 +31,9 @@ export enum OperadorRelacional{
     MAYORIGUAL,
     MENORIGUAL
 }
+
+export enum OperadorLogico{
+    AND,
+    OR,
+    NOT
+}

@@ -3,9 +3,10 @@
     const {Aritmetica}= require('./dist/src/expresion/Aritmetica');
     const {Primitivo} = require('./dist/src/expresion/Primitivo');
     const {Relacional} = require('./dist/src/expresion/Relacional');
-    const {Resultado, OperadorAritmetico, TipoDatos, OperadorRelacional} = require('./dist/src/expresion/Resultado');
+    const {Resultado, OperadorAritmetico, TipoDatos, OperadorRelacional, OperadorLogico} = require('./dist/src/expresion/Resultado');
     const {AST} = require('./dist/src/AST');
     const {Cout} = require('./dist/src/instruccion/Cout');
+    const {Logico} = require('./dist/src/expresion/Logico');
 
 %}
 
@@ -136,6 +137,7 @@ expresion: RES expresion %prec UMINUS  { $$ = new Aritmetica(new Primitivo(0, Ti
         | POW PARIZQ expresion COMA expresion PARDER { $$ = new Aritmetica($3, $5, OperadorAritmetico.POTENCIA, this._$.first_line, this._$.first_column); }
         | PARIZQ expresion PARDER       { $$ = $2; }
         | relacionales                  { $$ = $1; }
+        | logico                        { $$ = $1; }
         ;   
 
 relacionales: expresion IGUAL expresion { $$ = new Relacional($1, $3, OperadorRelacional.IGUAL, this._$.first_line, this._$.first_column); }
@@ -146,11 +148,22 @@ relacionales: expresion IGUAL expresion { $$ = new Relacional($1, $3, OperadorRe
             | expresion MAYORIGUAL expresion { $$ = new Relacional($1, $3, OperadorRelacional.MAYORIGUAL, this._$.first_line, this._$.first_column); }
             ;
 
+logico: expresion AND expresion { $$ = new Logico($1, $3, OperadorLogico.AND, this._$.first_line, this._$.first_column); }
+        | expresion OR expresion { $$ = new Logico($1, $3, OperadorLogico.OR, this._$.first_line, this._$.first_column); }
+        | NOT expresion { $$ = new Logico(null, $2, OperadorLogico.NOT, this._$.first_line, this._$.first_column); }
+        ;
+
+bloque: LLAVEIZQ instrucciones LLAVEDER { $$ = $2; }
+        | LLAVEIZQ LLAVEDER
+        ;
+
 cout: COUT OUTPUT lista_expresiones {$$ = new Cout($3, this._$.first_line, this._$.first_column);};
 
 lista_expresiones: lista_expresiones OUTPUT expresion { $$.push($3); $$ = $1;}
                  | expresion { $$ = [$1]; };
 
 
-
-
+if_g: IF PARIZQ expresion PARDER bloque
+    | ELSE bloque
+    | ELSE if_g
+;

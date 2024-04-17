@@ -1,0 +1,96 @@
+/* Editor.css */
+
+.editor-container {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centrar horizontalmente */
+    background-color: #1e1e1e; /* Fondo oscuro */
+    padding: 10px; /* Añadir un poco de espacio alrededor */
+  }
+  
+  .resultado-textarea {
+    width: 500px; /* Ancho del textarea aumentado */
+    height: 400px; /* Alto del textarea aumentado */
+    margin-left: 20px; /* Margen izquierdo */
+    background-color: #333; /* Fondo oscuro */
+    color: #fff; /* Texto blanco */
+    border: none;
+    border-radius: 5px;
+    padding: 10px; /* Añadir espacio interno */
+  }
+  
+  .interpretar-button {
+    margin-left: auto; /* Centrar el botón al final del contenedor */
+    margin-top: 20px; /* Añadir espacio entre el editor y el botón */
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff; /* Color de fondo */
+    color: #fff; /* Color del texto */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s; /* Transición suave */
+    /*Centrar el botón horizontalmente*/
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+    .interpretar-button:hover {
+        background-color: #0056b3; /* Cambio de color al pasar el ratón */
+    }
+  
+  .titulo {
+    text-align: center; /* Alineación del texto */
+    margin-bottom: 20px; /* Margen inferior */
+  }
+  
+  /* Cambios en App.css */
+  body {
+    background-color: #111; /* Fondo oscuro */
+    color: #fff; /* Texto blanco */
+  }
+  
+
+
+  /* Header.css */
+
+.header {
+    background-color: #333; /* Fondo oscuro */
+    color: #fff; /* Texto blanco */
+    padding: 10px; /* Añadir espacio interno */
+  }
+  
+  .menu {
+    display: flex;
+  }
+  
+  .menu-item {
+    margin-right: 20px; /* Añadir espacio entre los elementos del menú */
+    position: relative; /* Posicionamiento relativo para el menú desplegable */
+    cursor: pointer; /* Cambiar el cursor a pointer */
+  }
+  
+  .submenu {
+    display: none; /* Ocultar el submenu por defecto */
+    position: absolute; /* Posicionamiento absoluto */
+    top: 100%; /* Colocar el submenu debajo del menú principal */
+    left: 0; /* Alinear el submenu con el menú principal */
+    background-color: #444; /* Fondo oscuro */
+    padding: 10px; /* Añadir espacio interno */
+    border-radius: 5px; /* Añadir esquinas redondeadas */
+  }
+  
+  .menu-item:hover .submenu {
+    display: block; /* Mostrar el submenu al pasar el ratón sobre el elemento del menú */
+  }
+  
+  .submenu-item {
+    padding: 5px 0; /* Añadir espacio interno */
+    cursor: pointer; /* Cambiar el cursor a pointer */
+  }
+  
+  .submenu-item:hover {
+    background-color: #555; /* Cambiar el color de fondo al pasar el ratón sobre el elemento del submenu */
+  }
+  

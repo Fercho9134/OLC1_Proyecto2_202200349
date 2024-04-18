@@ -7,7 +7,14 @@
     const {AST} = require('./dist/src/AST');
     const {Cout} = require('./dist/src/instruccion/Cout');
     const {Logico} = require('./dist/src/expresion/Logico');
-
+    const {Bloque} = require('./dist/src/instruccion/Bloque');
+    const {Fn_IF} = require('./dist/src/instruccion/control/Fn_IF');
+    const {Acceso} = require('./dist/src/expresion/Acceso');
+    const {Asignacion} = require('./dist/src/instruccion/Asignacion');
+    const {Declaracion} = require('./dist/src/instruccion/definiciones/Declaracion');
+    const {Break} = require('./dist/src/instruccion/control/Break');
+    const {CWhile} = require('./dist/src/instruccion/ciclos/While');
+    const {Continue} = require('./dist/src/instruccion/control/Continue');
 %}
 
 %lex // Inicia parte léxica
@@ -118,8 +125,14 @@ ini : instrucciones EOF { return new AST($1);}
 instrucciones: instrucciones instruccion    {  $1.push($2); $$ = $1;}
             | instruccion                   { $$ =  [$1];}
 ;
-instruccion: EXEC expresion PYC         { $$ =  $2;}
-            |cout PYC                
+instruccion: cout PYC                    { $$ = $1;}
+            | if_g                        { $$ = $1;} 
+            |declaracion PYC               { $$ = $1;}
+            | asignacion PYC                { $$ = $1;}
+            |ciclo_while                { $$ = $1;} 
+            |instruccion_break PYC         { $$ = $1;}
+            |instruccion_continue PYC      { $$ = $1;}
+
 ;
 // Para sitetisar un dato, se utiliza $$
 expresion: RES expresion %prec UMINUS  { $$ = new Aritmetica(new Primitivo(0, TipoDatos.ENTERO, this._$.first_line, this._$.first_column), $2, OperadorAritmetico.RESTA, lexer.yylineno, lexer.yyleng); } 
@@ -138,6 +151,7 @@ expresion: RES expresion %prec UMINUS  { $$ = new Aritmetica(new Primitivo(0, Ti
         | PARIZQ expresion PARDER       { $$ = $2; }
         | relacionales                  { $$ = $1; }
         | logico                        { $$ = $1; }
+        | ID                            { $$ = new Acceso($1, this._$.first_line, this._$.first_column); }
         ;   
 
 relacionales: expresion IGUAL expresion { $$ = new Relacional($1, $3, OperadorRelacional.IGUAL, this._$.first_line, this._$.first_column); }
@@ -153,8 +167,8 @@ logico: expresion AND expresion { $$ = new Logico($1, $3, OperadorLogico.AND, th
         | NOT expresion { $$ = new Logico(null, $2, OperadorLogico.NOT, this._$.first_line, this._$.first_column); }
         ;
 
-bloque: LLAVEIZQ instrucciones LLAVEDER { $$ = $2; }
-        | LLAVEIZQ LLAVEDER
+bloque: LLAVEIZQ instrucciones LLAVEDER { $$ = new Bloque($2, 0, 0); }
+        | LLAVEIZQ LLAVEDER { $$ = new Bloque([], 0, 0); }
         ;
 
 cout: COUT OUTPUT lista_expresiones {$$ = new Cout($3, this._$.first_line, this._$.first_column);};
@@ -163,7 +177,26 @@ lista_expresiones: lista_expresiones OUTPUT expresion { $$.push($3); $$ = $1;}
                  | expresion { $$ = [$1]; };
 
 
-if_g: IF PARIZQ expresion PARDER bloque
-    | ELSE bloque
-    | ELSE if_g
+if_g: IF PARIZQ expresion PARDER bloque { $$ = new Fn_IF($3, $5, null, this._$.first_line, this._$.first_column); }
+    | IF PARIZQ expresion PARDER bloque ELSE bloque { $$ = new Fn_IF($3, $5, $7, this._$.first_line, this._$.first_column); }
+    | IF PARIZQ expresion PARDER bloque ELSE if_g { $$ = new Fn_IF($3, $5, $7, this._$.first_line, this._$.first_column); }
 ;
+
+tipos_datos: INT { $$ = TipoDatos.ENTERO; }
+            | DOUBLE { $$ = TipoDatos.DOBLE; }
+            | BOOL { $$ = TipoDatos.BOOLEANO; }
+            | CHAR { $$ = TipoDatos.CARACTER; }
+            | CADENA_ID { $$ = TipoDatos.CADENA; }
+            ;
+
+declaracion: tipos_datos ID ASIGNACION expresion { $$ = new Declaracion($1, $2, $4, this._$.first_line, this._$.first_column); }
+                ;
+asignacion: ID ASIGNACION expresion { $$ = new Asignacion($1, $3, this._$.first_line, this._$.first_column); }
+            ;   
+
+ciclo_while: WHILE PARIZQ expresion PARDER bloque { $$ = new CWhile($3, $5, this._$.first_line, this._$.first_column); }
+            ;
+instruccion_break: BREAK { $$ = new Break(this._$.first_line, this._$.first_column); }
+            ;
+instruccion_continue: CONTINUE { $$ = new Continue(this._$.first_line, this._$.first_column); }
+            ;

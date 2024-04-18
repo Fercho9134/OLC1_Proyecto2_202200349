@@ -7,12 +7,10 @@ class Cout extends Instruccion_1.Instruccion {
         super(linea, columna);
         this.expresiones = expresiones;
     }
-    interpretar(consola) {
+    interpretar(contexto, consola) {
         consola.push("\n");
-        console.log(this.expresiones);
         this.expresiones.forEach(expresion => {
-            console.log(expresion);
-            const resultado = expresion.interpretar();
+            const resultado = expresion.interpretar(contexto);
             consola.push(resultado.valor);
         });
         return null;

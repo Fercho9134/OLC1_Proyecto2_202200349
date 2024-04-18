@@ -10,9 +10,9 @@ class Aritmetica extends Expresion_1.Expresion {
         this.derecha = derecha;
         this.operador = operador;
     }
-    interpretar() {
-        const resultadoIzquierdo = this.izquierda.interpretar();
-        const resultadoDerecho = this.derecha.interpretar();
+    interpretar(contexto) {
+        const resultadoIzquierdo = this.izquierda.interpretar(contexto);
+        const resultadoDerecho = this.derecha.interpretar(contexto);
         if (this.operador === Resultado_1.OperadorAritmetico.SUMA) {
             if (resultadoIzquierdo.tipo === Resultado_1.TipoDatos.ENTERO && resultadoDerecho.tipo === Resultado_1.TipoDatos.ENTERO) {
                 return { valor: resultadoIzquierdo.valor + resultadoDerecho.valor, tipo: Resultado_1.TipoDatos.ENTERO };

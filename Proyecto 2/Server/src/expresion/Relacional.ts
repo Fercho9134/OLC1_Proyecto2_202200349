@@ -1,6 +1,7 @@
 import e from "express";
 import { Expresion } from "./Expresion";
 import { Resultado, OperadorRelacional, TipoDatos } from "./Resultado";
+import { Contexto } from "../contexto/TablaSimbolo";
 
 export class Relacional extends Expresion{
     public izquierda: Expresion;
@@ -14,9 +15,9 @@ export class Relacional extends Expresion{
         this.operacion = operacion;
     }
 
-    public interpretar(): Resultado {
-        const resultadoIzquierdo = this.izquierda.interpretar();
-        const resultadoDerecho = this.derecha.interpretar();
+    public interpretar(contexto:Contexto): Resultado {
+        const resultadoIzquierdo = this.izquierda.interpretar(contexto);
+        const resultadoDerecho = this.derecha.interpretar(contexto);
         if(resultadoIzquierdo.tipo === TipoDatos.ENTERO && resultadoDerecho.tipo === TipoDatos.ENTERO){
             if(this.operacion === OperadorRelacional.IGUAL){
                 return {valor: resultadoIzquierdo.valor === resultadoDerecho.valor, tipo: TipoDatos.BOOLEANO}

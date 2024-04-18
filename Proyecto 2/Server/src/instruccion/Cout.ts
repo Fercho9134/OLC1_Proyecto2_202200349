@@ -1,5 +1,6 @@
 import { Expresion } from "../expresion/Expresion";
 import { Instruccion } from "./Instruccion";
+import { Contexto } from "../contexto/TablaSimbolo";
 
 export class Cout extends Instruccion {
     private expresiones: Expresion[];
@@ -9,12 +10,10 @@ export class Cout extends Instruccion {
         this.expresiones = expresiones;
     }
 
-    public interpretar(consola: string[]): null {
+    public interpretar(contexto:Contexto, consola: string[]): null {
         consola.push("\n");
-        console.log(this.expresiones)
         this.expresiones.forEach(expresion => {
-            console.log(expresion)
-            const resultado = expresion.interpretar();
+            const resultado = expresion.interpretar(contexto);
             consola.push(resultado.valor);
         });
         return null;

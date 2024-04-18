@@ -1,5 +1,6 @@
 import { Expresion } from "./Expresion";
 import { Resultado, TipoDatos, OperadorAritmetico } from "./Resultado";
+import { Contexto } from "../contexto/TablaSimbolo";
 
 export class Aritmetica extends Expresion{
     public izquierda: Expresion;
@@ -13,9 +14,9 @@ export class Aritmetica extends Expresion{
         this.operador = operador;
     }
 
-    public interpretar():Resultado{
-        const resultadoIzquierdo = this.izquierda.interpretar();
-        const resultadoDerecho = this.derecha.interpretar();
+    public interpretar(contexto:Contexto):Resultado{
+        const resultadoIzquierdo = this.izquierda.interpretar(contexto);
+        const resultadoDerecho = this.derecha.interpretar(contexto);
 
         if(this.operador === OperadorAritmetico.SUMA){
 

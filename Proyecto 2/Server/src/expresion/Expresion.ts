@@ -1,3 +1,4 @@
+import { Contexto } from "../contexto/TablaSimbolo";
 import { Resultado } from "./Resultado";
 
 
@@ -9,5 +10,5 @@ export abstract class Expresion {
         this.columna = columna;
     }
 
-    public abstract interpretar():Resultado;
+    public abstract interpretar(contexto:Contexto):Resultado;
 }

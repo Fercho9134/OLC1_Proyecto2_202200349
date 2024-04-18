@@ -10,9 +10,9 @@ class Relacional extends Expresion_1.Expresion {
         this.derecha = derecha;
         this.operacion = operacion;
     }
-    interpretar() {
-        const resultadoIzquierdo = this.izquierda.interpretar();
-        const resultadoDerecho = this.derecha.interpretar();
+    interpretar(contexto) {
+        const resultadoIzquierdo = this.izquierda.interpretar(contexto);
+        const resultadoDerecho = this.derecha.interpretar(contexto);
         if (resultadoIzquierdo.tipo === Resultado_1.TipoDatos.ENTERO && resultadoDerecho.tipo === Resultado_1.TipoDatos.ENTERO) {
             if (this.operacion === Resultado_1.OperadorRelacional.IGUAL) {
                 return { valor: resultadoIzquierdo.valor === resultadoDerecho.valor, tipo: Resultado_1.TipoDatos.BOOLEANO };

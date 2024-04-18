@@ -10,12 +10,12 @@ class Logico extends Expresion_1.Expresion {
         this.derecha = derecha;
         this.operador = operador;
     }
-    interpretar() {
+    interpretar(contexto) {
         let resultadoIzquierdo = null;
         if (this.operador != Resultado_1.OperadorLogico.NOT) {
-            resultadoIzquierdo = this.izquierda.interpretar();
+            resultadoIzquierdo = this.izquierda.interpretar(contexto);
         }
-        const resultadoDerecho = this.derecha.interpretar();
+        const resultadoDerecho = this.derecha.interpretar(contexto);
         if (resultadoIzquierdo != null && this.operador == Resultado_1.OperadorLogico.AND) {
             if (resultadoIzquierdo.tipo == Resultado_1.TipoDatos.BOOLEANO && resultadoDerecho.tipo == Resultado_1.TipoDatos.BOOLEANO) {
                 return { valor: resultadoIzquierdo.valor && resultadoDerecho.valor, tipo: Resultado_1.TipoDatos.BOOLEANO };

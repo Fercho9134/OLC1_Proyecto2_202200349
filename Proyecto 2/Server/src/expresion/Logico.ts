@@ -1,4 +1,5 @@
 import { Expresion } from "./Expresion";
+import { Contexto } from "../contexto/TablaSimbolo";
 import { OperadorLogico, Resultado, TipoDatos } from "./Resultado";
 
 export class Logico extends Expresion{
@@ -13,12 +14,12 @@ export class Logico extends Expresion{
         this.operador = operador;
     }
 
-    public interpretar(): Resultado {
+    public interpretar(contexto:Contexto): Resultado {
         let resultadoIzquierdo = null
         if (this.operador != OperadorLogico.NOT) {
-            resultadoIzquierdo = this.izquierda.interpretar()
+            resultadoIzquierdo = this.izquierda.interpretar(contexto)
         }
-        const resultadoDerecho = this.derecha.interpretar()
+        const resultadoDerecho = this.derecha.interpretar(contexto)
 
         if (resultadoIzquierdo != null && this.operador == OperadorLogico.AND) {
             if (resultadoIzquierdo.tipo == TipoDatos.BOOLEANO && resultadoDerecho.tipo == TipoDatos.BOOLEANO) {

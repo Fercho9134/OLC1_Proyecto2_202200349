@@ -1,7 +1,7 @@
 import { Instruccion } from "../Instruccion";
 import { Expresion } from "../../expresion/Expresion";
 import {Bloque} from "../Bloque";
-import { TipoDatos } from "../../expresion/Resultado";
+import { Resultado, Resultado_return, TipoDatos } from "../../expresion/Resultado";
 import { Contexto } from "../../contexto/TablaSimbolo";
 export class Fn_IF extends Instruccion{
     condicion: Expresion;
@@ -15,7 +15,7 @@ export class Fn_IF extends Instruccion{
         this.bloque_else = bloque_else;
     }
 
-    public interpretar(contexto:Contexto,consola: string[]): null | string {
+    public interpretar(contexto:Contexto,consola: string[]): null | string | Resultado_return | Resultado {
         const condicion = this.condicion.interpretar(contexto)
         if (condicion.tipo!=TipoDatos.BOOLEANO)
             throw Error("La condición no es booleana")

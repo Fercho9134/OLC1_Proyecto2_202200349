@@ -82,6 +82,7 @@
     background-color: #444; /* Fondo oscuro */
     padding: 10px; /* Añadir espacio interno */
     border-radius: 5px; /* Añadir esquinas redondeadas */
+    z-index: 1; /* Asegurar que el submenu esté por encima del contenido */
   }
   
   .menu-item:hover .submenu {

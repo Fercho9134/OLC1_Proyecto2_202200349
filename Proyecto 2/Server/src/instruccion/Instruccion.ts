@@ -1,4 +1,5 @@
 import { Contexto } from "../contexto/TablaSimbolo";
+import { Resultado, Resultado_return } from "../expresion/Resultado";
 
 export abstract class Instruccion {
     public linea: number;
@@ -10,5 +11,5 @@ export abstract class Instruccion {
 
     }
 
-    public abstract interpretar(contexto:Contexto, consola:string []): null | string;
+    public abstract interpretar(contexto:Contexto, consola:string []): null | string | Resultado_return|Resultado;
 }

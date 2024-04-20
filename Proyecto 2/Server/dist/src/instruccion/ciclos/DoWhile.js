@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CWhile = void 0;
+exports.DoWhile = void 0;
 const Resultado_1 = require("../../expresion/Resultado");
 const Instruccion_1 = require("../Instruccion");
-class CWhile extends Instruccion_1.Instruccion {
-    constructor(condicion, instrucciones, linea, columna) {
+class DoWhile extends Instruccion_1.Instruccion {
+    constructor(instrucciones, condicion, linea, columna) {
         super(linea, columna);
         this.condicion = condicion;
         this.instrucciones = instrucciones;
@@ -13,7 +13,7 @@ class CWhile extends Instruccion_1.Instruccion {
         let condicion = this.condicion.interpretar(contexto);
         if (condicion.tipo != Resultado_1.TipoDatos.BOOLEANO)
             throw new Error("La condicion no es booleana");
-        while (condicion.valor) {
+        do {
             // Se ejecutan las instrucciones
             const retorno = this.instrucciones.interpretar(contexto, consola);
             if (typeof retorno == "string") {
@@ -32,8 +32,8 @@ class CWhile extends Instruccion_1.Instruccion {
             }
             // Se calcula la condicion
             condicion = this.condicion.interpretar(contexto);
-        }
+        } while (condicion.valor);
         return null;
     }
 }
-exports.CWhile = CWhile;
+exports.DoWhile = DoWhile;

@@ -13,6 +13,7 @@ class Acceso extends Expresion_1.Expresion {
         if (simbolo) {
             if (simbolo.tipoSimbolo == Simbolo_1.TipoSimbolo.VARIABLE) {
                 const resultado = simbolo.obtenerValor();
+                console.log(resultado);
                 return { valor: resultado.valor, tipo: resultado.tipo };
             }
             throw new Error(`El simbolo ${this.id} no es una variable`);

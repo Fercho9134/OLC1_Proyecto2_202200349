@@ -4,22 +4,24 @@ import { Resultado, Resultado_return, TipoDatos } from "../../expresion/Resultad
 import { Bloque } from "../Bloque";
 import { Instruccion } from "../Instruccion";
 
-export class CWhile extends Instruccion{
+export class DoWhile extends Instruccion {
     condicion: Expresion
     instrucciones: Bloque
 
-    constructor(condicion:Expresion,instrucciones:Bloque,linea:number,columna:number){
-        super(linea,columna)
+    constructor(instrucciones: Bloque, condicion: Expresion, linea: number, columna: number) {
+        super(linea, columna)
         this.condicion = condicion
         this.instrucciones = instrucciones
     }
+
     public interpretar(contexto: Contexto, consola: string[]): null | string | Resultado_return | Resultado {
-        let condicion = this.condicion.interpretar(contexto)    
+        let condicion = this.condicion.interpretar(contexto)
         if (condicion.tipo != TipoDatos.BOOLEANO) throw new Error("La condicion no es booleana")
-        while(condicion.valor){
+        do {
             // Se ejecutan las instrucciones
-             const retorno = this.instrucciones.interpretar(contexto,consola)
-             if (typeof retorno == "string") {
+            const retorno = this.instrucciones.interpretar(contexto, consola)
+
+            if (typeof retorno == "string") {
                 if (retorno == "break") {
                     console.log("break")
                     break;
@@ -36,8 +38,7 @@ export class CWhile extends Instruccion{
             }
             // Se calcula la condicion
             condicion = this.condicion.interpretar(contexto)
-        }   
+        } while (condicion.valor)
         return null
     }
-
 }

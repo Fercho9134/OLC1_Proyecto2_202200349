@@ -4,6 +4,17 @@ export type Resultado = {
     tipo: TipoDatos
 }
 
+export type Resultado_return = {
+    valor:Resultado,
+    tipo: string
+}
+
+export type variables = {
+    id: string,
+    tipo: TipoDatos,
+    valor: any
+}
+
 export enum TipoDatos{
     ENTERO = "ENTERO",
     DOBLE = "DOBLE",

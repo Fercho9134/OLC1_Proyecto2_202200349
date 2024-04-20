@@ -16,6 +16,7 @@ export class Acceso extends Expresion{
         if (simbolo){
             if(simbolo.tipoSimbolo == TipoSimbolo.VARIABLE){
                 const resultado = simbolo.obtenerValor() as Resultado
+                console.log(resultado)
                 return {valor: resultado.valor, tipo: resultado.tipo}
             }
             throw new Error(`El simbolo ${this.id} no es una variable`);

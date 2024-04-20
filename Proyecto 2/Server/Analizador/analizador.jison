@@ -3,7 +3,7 @@
     const {Aritmetica}= require('./dist/src/expresion/Aritmetica');
     const {Primitivo} = require('./dist/src/expresion/Primitivo');
     const {Relacional} = require('./dist/src/expresion/Relacional');
-    const {Resultado, OperadorAritmetico, TipoDatos, OperadorRelacional, OperadorLogico} = require('./dist/src/expresion/Resultado');
+    const {Resultado, OperadorAritmetico, TipoDatos, OperadorRelacional, OperadorLogico, variables} = require('./dist/src/expresion/Resultado');
     const {AST} = require('./dist/src/AST');
     const {Cout} = require('./dist/src/instruccion/Cout');
     const {Logico} = require('./dist/src/expresion/Logico');
@@ -15,6 +15,16 @@
     const {Break} = require('./dist/src/instruccion/control/Break');
     const {CWhile} = require('./dist/src/instruccion/ciclos/While');
     const {Continue} = require('./dist/src/instruccion/control/Continue');
+    const {DoWhile} = require('./dist/src/instruccion/ciclos/DoWhile');
+    const {Ternario} = require('./dist/src/expresion/Ternario');
+    const {Incremento} = require('./dist/src/instruccion/Incremento');
+    const {Decremento} = require('./dist/src/instruccion/Decremento');
+    const {CFor} = require('./dist/src/instruccion/ciclos/For');
+    const {Acceso_metodo} = require('./dist/src/instruccion/Acceso_metodo');
+    const {Declaracion_Metodo} = require('./dist/src/instruccion/definiciones/Declaracion_Metodo');
+        const {Return} = require('./dist/src/instruccion/control/Return');
+        const {Acceso_Funcion} = require('./dist/src/instruccion/Acceso_Funcion');
+        const {Declaracion_Funcion} = require('./dist/src/instruccion/definiciones/Declaracion_Funcion');
 %}
 
 %lex // Inicia parte léxica
@@ -29,7 +39,7 @@
 
 // Comentarios son con //
 "int"                  return 'INT';
-"double"               return 'DOUBLE';
+"double"               return 'DOUBLE_ID';
 "bool"                return 'BOOL';
 "char"               return 'CHAR';
 "std::string"         return 'CADENA_ID';
@@ -106,12 +116,13 @@
 /lex
 
 // precedencia
+%left 'INTERROGACION'
 %right 'NOT'
 %left 'OR'
 %left 'AND'
 %left 'IGUAL','DISTINTO','MENOR','MENORIGUAL','MAYOR','MAYORIGUAL'
 %left 'MAS', 'RES'
-%left 'MUL','DIV'
+%left 'MUL','DIV', 'MOD'
 %right 'UMINUS'
 
 // Inicio de gramática
@@ -132,6 +143,15 @@ instruccion: cout PYC                    { $$ = $1;}
             |ciclo_while                { $$ = $1;} 
             |instruccion_break PYC         { $$ = $1;}
             |instruccion_continue PYC      { $$ = $1;}
+            |ciclo_do_while            { $$ = $1;}
+             |incremento PYC { $$ = $1;}
+             |for_g { $$ = $1;}
+        |declaracion_metodo { $$ = $1;}
+        |acceso_metodo PYC { $$ = $1;}
+        |declaracion_funcion { $$ = $1;}
+        |acceso_funcion PYC { $$ = $1;}
+        |instruccion_return PYC { $$ = $1;}
+
 
 ;
 // Para sitetisar un dato, se utiliza $$
@@ -140,6 +160,7 @@ expresion: RES expresion %prec UMINUS  { $$ = new Aritmetica(new Primitivo(0, Ti
         | expresion RES expresion       { $$ = new Aritmetica($1, $3, OperadorAritmetico.RESTA, this._$.first_line, this._$.first_column); }
         | expresion MUL expresion       { $$ = new Aritmetica($1, $3, OperadorAritmetico.MULTIPLICACION, this._$.first_line, this._$.first_column);}
         | expresion DIV expresion       { $$ =  new Aritmetica($1, $3, OperadorAritmetico.DIVISION, this._$.first_line, this._$.first_column); } 
+        | expresion MOD expresion       { $$ = new Aritmetica($1, $3, OperadorAritmetico.MODULO, this._$.first_line, this._$.first_column); }
         | ENTERO                        { $$ = new Primitivo($1, TipoDatos.ENTERO, this._$.first_line, this._$.first_column); }
         | DOUBLE                        { $$ =  new Primitivo($1, TipoDatos.DOBLE, this._$.first_line, this._$.first_column); }
         | CADENA                        { $$ = new Primitivo($1, TipoDatos.CADENA, this._$.first_line, this._$.first_column); }
@@ -152,6 +173,8 @@ expresion: RES expresion %prec UMINUS  { $$ = new Aritmetica(new Primitivo(0, Ti
         | relacionales                  { $$ = $1; }
         | logico                        { $$ = $1; }
         | ID                            { $$ = new Acceso($1, this._$.first_line, this._$.first_column); }
+        | expresion INTERROGACION expresion DOSPUNTOS expresion { $$ = new Ternario($1, $3, $5, this._$.first_line, this._$.first_column); }
+        | acceso_metodo { $$ = $1; }
         ;   
 
 relacionales: expresion IGUAL expresion { $$ = new Relacional($1, $3, OperadorRelacional.IGUAL, this._$.first_line, this._$.first_column); }
@@ -182,15 +205,28 @@ if_g: IF PARIZQ expresion PARDER bloque { $$ = new Fn_IF($3, $5, null, this._$.f
     | IF PARIZQ expresion PARDER bloque ELSE if_g { $$ = new Fn_IF($3, $5, $7, this._$.first_line, this._$.first_column); }
 ;
 
+incremento: ID MAS MAS { $$ = new Incremento($1, this._$.first_line, this._$.first_column);}
+        | ID RES RES { $$ = new Decremento($1, this._$.first_line, this._$.first_column);}
+;
+
+
 tipos_datos: INT { $$ = TipoDatos.ENTERO; }
-            | DOUBLE { $$ = TipoDatos.DOBLE; }
+            | DOUBLE_ID { $$ = TipoDatos.DOBLE; }
             | BOOL { $$ = TipoDatos.BOOLEANO; }
             | CHAR { $$ = TipoDatos.CARACTER; }
             | CADENA_ID { $$ = TipoDatos.CADENA; }
             ;
 
-declaracion: tipos_datos ID ASIGNACION expresion { $$ = new Declaracion($1, $2, $4, this._$.first_line, this._$.first_column); }
+lista_ids: lista_ids COMA ID { $1.push($3); $$ = $1; }
+            | ID { $$ = [$1]; }
+            ;
+
+declaracion: tipos_datos lista_ids ASIGNACION expresion { $$ = new Declaracion($1, $2, $4, this._$.first_line, this._$.first_column); }
+               | tipos_datos lista_ids { $$ = new Declaracion($1, $2, null, this._$.first_line, this._$.first_column); }
                 ;
+
+
+
 asignacion: ID ASIGNACION expresion { $$ = new Asignacion($1, $3, this._$.first_line, this._$.first_column); }
             ;   
 
@@ -200,3 +236,47 @@ instruccion_break: BREAK { $$ = new Break(this._$.first_line, this._$.first_colu
             ;
 instruccion_continue: CONTINUE { $$ = new Continue(this._$.first_line, this._$.first_column); }
             ;
+
+instruccion_return: RETURN expresion { $$ = new Return($2, this._$.first_line, this._$.first_column); }
+                | RETURN { $$ = new Return(null, this._$.first_line, this._$.first_column); }
+            ;
+
+ciclo_do_while: DO bloque WHILE PARIZQ expresion PARDER { $$ = new DoWhile($2, $5, this._$.first_line, this._$.first_column); }
+            ;
+
+for_g: FOR PARIZQ declaracion PYC expresion PYC actalizacion PARDER bloque { $$ = new CFor($3, $5, $7, $9, this._$.first_line, this._$.first_column); }
+        ;
+
+actalizacion: incremento
+            | asignacion
+            ;
+
+declaracion_metodo: VOID ID PARIZQ lista_parametros PARDER bloque { $$ = new Declaracion_Metodo($2, $4, $6, this._$.first_line, this._$.first_column); }
+                | VOID ID PARIZQ PARDER bloque { $$ = new Declaracion_Metodo($2, [], $5, this._$.first_line, this._$.first_column); }
+                ;
+
+lista_parametros: lista_parametros COMA parametro { $1.push($3); $$ = $1; }
+                | parametro { $$ = [$1]; }
+                ;
+
+parametro: tipos_datos ID ASIGNACION expresion { $$ = {id: $2, tipo: $1, valor: $4}; }
+        | tipos_datos ID { $$ = {id: $2, tipo: $1, valor: null}; }
+        ;
+
+lista_parametros_acceso: lista_parametros_acceso COMA parametros_acceso { $1.push($3); $$ = $1; }
+                    | parametros_acceso { $$ = [$1]; }
+;
+
+parametros_acceso: ID ASIGNACION expresion { $$ = {id: $1, tipo: null, valor: $3};}
+|expresion { $$ = {id: null, tipo: null, valor: $1}; }
+;
+
+
+acceso_metodo: ID PARIZQ lista_parametros_acceso PARDER { $$ = new Acceso_metodo($1, $3, this._$.first_line, this._$.first_column); }
+                | ID PARIZQ PARDER { $$ = new Acceso_metodo($1, [], this._$.first_line, this._$.first_column); }
+            ;
+
+declaracion_funcion: tipos_datos ID PARIZQ lista_parametros PARDER bloque { $$ = new Declaracion_Funcion($1, $2, $4, $6, this._$.first_line, this._$.first_column); }
+                | tipos_datos ID PARIZQ PARDER bloque { $$ = new Declaracion_Funcion($1, $2, [], $5, this._$.first_line, this._$.first_column); }
+                ;
+

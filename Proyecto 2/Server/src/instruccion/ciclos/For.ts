@@ -1,6 +1,6 @@
 import { Contexto } from "../../contexto/TablaSimbolo";
 import { Expresion } from "../../expresion/Expresion";
-import { Resultado, Resultado_return } from "../../expresion/Resultado";
+import { Resultado, Resultado_return, TipoDatos } from "../../expresion/Resultado";
 import { Bloque } from "../Bloque";
 import { Instruccion } from "../Instruccion";
 import { Declaracion } from "../definiciones/Declaracion";
@@ -19,7 +19,7 @@ export class CFor extends Instruccion{
         this.bloque = bloque
     }
 
-    public interpretar(contexto: Contexto, consola: string[]): null | string | Resultado_return| Resultado{
+    public interpretar(contexto: Contexto, consola: string[]): null | string | Resultado {
         this.declaracion.interpretar(contexto, consola)
         while (this.condicion.interpretar(contexto).valor){
             const retorno = this.bloque.interpretar(contexto, consola)
@@ -34,9 +34,12 @@ export class CFor extends Instruccion{
                 }
             } else {
 
-                if (retorno?.tipo == "return") {
+                if (retorno?.tipo == TipoDatos.RETURN) {
                     return retorno
                 }
+
+
+
             }
             this.actualizacion.interpretar(contexto, consola)
         }

@@ -15,7 +15,7 @@ export class Fn_IF extends Instruccion{
         this.bloque_else = bloque_else;
     }
 
-    public interpretar(contexto:Contexto,consola: string[]): null | string | Resultado_return | Resultado {
+    public interpretar(contexto:Contexto,consola: string[]): null | string | Resultado {
         const condicion = this.condicion.interpretar(contexto)
         if (condicion.tipo!=TipoDatos.BOOLEANO)
             throw Error("La condición no es booleana")

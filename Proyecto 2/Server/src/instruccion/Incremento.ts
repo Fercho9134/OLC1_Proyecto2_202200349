@@ -10,7 +10,7 @@ export class Incremento extends Instruccion {
         this.id = id
     }
     public interpretar(contexto: Contexto, consola: string[]): null {
-        const simbolo = contexto.obtenerVariable(this.id)
+        const simbolo = contexto.obtenerSimbolo(this.id)
         if (simbolo) {
             if (simbolo.tipoSimbolo == TipoSimbolo.VARIABLE) {
                 const resultado = simbolo.obtenerValor() as Resultado

@@ -26,7 +26,7 @@ class CWhile extends Instruccion_1.Instruccion {
                 }
             }
             else {
-                if ((retorno === null || retorno === void 0 ? void 0 : retorno.tipo) == "return") {
+                if ((retorno === null || retorno === void 0 ? void 0 : retorno.tipo) == Resultado_1.TipoDatos.RETURN) {
                     return retorno;
                 }
             }

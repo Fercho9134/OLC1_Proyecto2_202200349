@@ -14,7 +14,7 @@ export class DoWhile extends Instruccion {
         this.instrucciones = instrucciones
     }
 
-    public interpretar(contexto: Contexto, consola: string[]): null | string | Resultado_return | Resultado {
+    public interpretar(contexto: Contexto, consola: string[]): null | string | Resultado{
         let condicion = this.condicion.interpretar(contexto)
         if (condicion.tipo != TipoDatos.BOOLEANO) throw new Error("La condicion no es booleana")
         do {
@@ -30,11 +30,16 @@ export class DoWhile extends Instruccion {
                 if (retorno == "continue") {
                     continue;
                 }
+
+
             } else {
 
-                if (retorno?.tipo == "return") {
+                if (retorno?.tipo == TipoDatos.RETURN) {
                     return retorno
                 }
+
+
+
             }
             // Se calcula la condicion
             condicion = this.condicion.interpretar(contexto)

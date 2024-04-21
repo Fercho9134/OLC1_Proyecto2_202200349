@@ -9,6 +9,28 @@ export function EditorT() {
   const editorRef = useRef(null);
   const [resultado, setResultado] = useState("");
 
+  const handleFileOpen = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.sc'; // Puedes ajustar esto para aceptar diferentes tipos de archivos
+    
+    input.onchange = (event) => {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      
+      reader.onload = (e) => {
+        const content = e.target.result;
+        if (editorRef.current) {
+          editorRef.current.setValue(content);
+        }
+      };
+      
+      reader.readAsText(file);
+    };
+    
+    input.click();
+  };
+
   function handleEditorDidMount(editor, monaco) {
     editorRef.current = editor;
   }
@@ -23,7 +45,7 @@ export function EditorT() {
 
   return (
     <>
-      <Header />
+      <Header onFileOpen={handleFileOpen} />
       <div className="editor-container"> {/* Clase CSS para el contenedor */}
         <Editor
           height="60vh"

@@ -1,3 +1,4 @@
+import { Expresion } from "./Expresion"
 
 export type Resultado = {
     valor: any,
@@ -10,9 +11,9 @@ export type Resultado_return = {
 }
 
 export type variables = {
-    id: string,
     tipo: TipoDatos,
-    valor: any
+    id: string,
+    valor: Expresion
 }
 
 export enum TipoDatos{
@@ -21,7 +22,9 @@ export enum TipoDatos{
     BOOLEANO= "BOOLEANO",
     CADENA= "CADENA",
     CARACTER= "CARACTER",
-    ERROR= "ERROR"
+    ERROR= "ERROR",
+    VOID = "VOID",
+    RETURN = "RETURN"
 }
 
 export enum OperadorAritmetico{

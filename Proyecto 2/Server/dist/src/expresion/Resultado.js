@@ -9,6 +9,8 @@ var TipoDatos;
     TipoDatos["CADENA"] = "CADENA";
     TipoDatos["CARACTER"] = "CARACTER";
     TipoDatos["ERROR"] = "ERROR";
+    TipoDatos["VOID"] = "VOID";
+    TipoDatos["RETURN"] = "RETURN";
 })(TipoDatos || (exports.TipoDatos = TipoDatos = {}));
 var OperadorAritmetico;
 (function (OperadorAritmetico) {

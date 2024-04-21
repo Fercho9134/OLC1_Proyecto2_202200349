@@ -20,9 +20,15 @@ export class Declaracion extends Instruccion{
 
         let valor = null
 
+        console.log("Logoro 1")
+
+        console.log("Expresiones a interpretar",this.expresion)
+
         if(this.expresion != null){
             valor = this.expresion.interpretar(contexto)  
         }
+
+        console.log("Logoro 2")
 
         for (let id of this.id){
             if (valor!=null){

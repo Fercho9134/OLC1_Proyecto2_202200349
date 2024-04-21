@@ -11,9 +11,9 @@ class Return extends Instruccion_1.Instruccion {
     interpretar(contexto, consola) {
         if (this.retorno != null) {
             const valor = this.retorno.interpretar(contexto);
-            return { valor: valor, tipo: "return" };
+            return { tipo: Resultado_1.TipoDatos.RETURN, valor: valor };
         }
-        return { valor: { valor: null, tipo: Resultado_1.TipoDatos.ERROR }, tipo: "return" };
+        return "return";
     }
 }
 exports.Return = Return;

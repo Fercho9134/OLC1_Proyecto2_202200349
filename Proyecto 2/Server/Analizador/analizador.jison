@@ -20,11 +20,10 @@
     const {Incremento} = require('./dist/src/instruccion/Incremento');
     const {Decremento} = require('./dist/src/instruccion/Decremento');
     const {CFor} = require('./dist/src/instruccion/ciclos/For');
-    const {Acceso_metodo} = require('./dist/src/instruccion/Acceso_metodo');
-    const {Declaracion_Metodo} = require('./dist/src/instruccion/definiciones/Declaracion_Metodo');
+    const {Llamada} = require('./dist/src/instruccion/Llamada');
+    const {Funcion} = require('./dist/src/instruccion/definiciones/Funcion');
         const {Return} = require('./dist/src/instruccion/control/Return');
-        const {Acceso_Funcion} = require('./dist/src/instruccion/Acceso_Funcion');
-        const {Declaracion_Funcion} = require('./dist/src/instruccion/definiciones/Declaracion_Funcion');
+        const {Execute} = require('./dist/src/instruccion/Execute');
 %}
 
 %lex // Inicia parte léxica
@@ -148,9 +147,8 @@ instruccion: cout PYC                    { $$ = $1;}
              |for_g { $$ = $1;}
         |declaracion_metodo { $$ = $1;}
         |acceso_metodo PYC { $$ = $1;}
-        |declaracion_funcion { $$ = $1;}
-        |acceso_funcion PYC { $$ = $1;}
         |instruccion_return PYC { $$ = $1;}
+        |execute PYC { $$ = $1;}
 
 
 ;
@@ -215,6 +213,7 @@ tipos_datos: INT { $$ = TipoDatos.ENTERO; }
             | BOOL { $$ = TipoDatos.BOOLEANO; }
             | CHAR { $$ = TipoDatos.CARACTER; }
             | CADENA_ID { $$ = TipoDatos.CADENA; }
+            | VOID { $$ = TipoDatos.VOID; }
             ;
 
 lista_ids: lista_ids COMA ID { $1.push($3); $$ = $1; }
@@ -251,32 +250,28 @@ actalizacion: incremento
             | asignacion
             ;
 
-declaracion_metodo: VOID ID PARIZQ lista_parametros PARDER bloque { $$ = new Declaracion_Metodo($2, $4, $6, this._$.first_line, this._$.first_column); }
-                | VOID ID PARIZQ PARDER bloque { $$ = new Declaracion_Metodo($2, [], $5, this._$.first_line, this._$.first_column); }
+declaracion_metodo: tipos_datos ID PARIZQ lista_parametros PARDER bloque { $$ = new Funcion($1, $2, $4, $6, this._$.first_line, this._$.first_column); }
+                | tipos_datos ID PARIZQ PARDER bloque { $$ = new Funcion($1, $2, [], $5, this._$.first_line, this._$.first_column); }
                 ;
 
 lista_parametros: lista_parametros COMA parametro { $1.push($3); $$ = $1; }
                 | parametro { $$ = [$1]; }
                 ;
 
-parametro: tipos_datos ID ASIGNACION expresion { $$ = {id: $2, tipo: $1, valor: $4}; }
-        | tipos_datos ID { $$ = {id: $2, tipo: $1, valor: null}; }
+parametro:  tipos_datos ID { $$ = {id: $2, tipo: $1, valor: null}; }
         ;
 
-lista_parametros_acceso: lista_parametros_acceso COMA parametros_acceso { $1.push($3); $$ = $1; }
-                    | parametros_acceso { $$ = [$1]; }
-;
-
-parametros_acceso: ID ASIGNACION expresion { $$ = {id: $1, tipo: null, valor: $3};}
-|expresion { $$ = {id: null, tipo: null, valor: $1}; }
+lista_parametros_acceso: lista_parametros_acceso COMA expresion { $1.push($3); $$ = $1; }
+                    | expresion { $$ = [$1]; }
 ;
 
 
-acceso_metodo: ID PARIZQ lista_parametros_acceso PARDER { $$ = new Acceso_metodo($1, $3, this._$.first_line, this._$.first_column); }
-                | ID PARIZQ PARDER { $$ = new Acceso_metodo($1, [], this._$.first_line, this._$.first_column); }
+
+acceso_metodo: ID PARIZQ lista_parametros_acceso PARDER { $$ = new Llamada($1, $3, this._$.first_line, this._$.first_column); }
+                | ID PARIZQ PARDER { $$ = new Llamada($1, [], this._$.first_line, this._$.first_column); }
             ;
 
-declaracion_funcion: tipos_datos ID PARIZQ lista_parametros PARDER bloque { $$ = new Declaracion_Funcion($1, $2, $4, $6, this._$.first_line, this._$.first_column); }
-                | tipos_datos ID PARIZQ PARDER bloque { $$ = new Declaracion_Funcion($1, $2, [], $5, this._$.first_line, this._$.first_column); }
-                ;
+execute: EXECUTE acceso_metodo { $$ = new Execute($2, this._$.first_line, this._$.first_column); }
+        ;
+
 

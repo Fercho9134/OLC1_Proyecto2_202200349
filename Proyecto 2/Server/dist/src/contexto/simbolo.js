@@ -14,6 +14,9 @@ class Simbolo {
     actualizarValor(valor) {
         this.valor = valor;
     }
+    obtenerTipo() {
+        return this.tipo;
+    }
 }
 exports.Simbolo = Simbolo;
 var TipoSimbolo;

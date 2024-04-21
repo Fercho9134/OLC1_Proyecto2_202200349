@@ -11,7 +11,10 @@ class Bloque extends Instruccion_1.Instruccion {
     interpretar(contexto, consola) {
         const nuevoContexto = new TablaSimbolo_1.Contexto(contexto);
         for (const instruccion of this.instrucciones) {
+            console.log(instruccion);
+            console.log("Consola", consola);
             const resultado = instruccion.interpretar(nuevoContexto, consola);
+            console.log(resultado);
             if (resultado)
                 return resultado;
         }

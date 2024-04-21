@@ -11,5 +11,5 @@ export abstract class Instruccion {
 
     }
 
-    public abstract interpretar(contexto:Contexto, consola:string []): null | string | Resultado_return|Resultado;
+    public abstract interpretar(contexto:Contexto, consola:string []): null | string | Resultado;
 }

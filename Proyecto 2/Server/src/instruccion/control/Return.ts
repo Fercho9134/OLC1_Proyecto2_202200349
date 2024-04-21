@@ -11,13 +11,13 @@ export class Return extends Instruccion{
         this.retorno = retorno
     }
 
-    public interpretar(contexto: Contexto, consola: string[]): Resultado_return {
+    public interpretar(contexto: Contexto, consola: string[]): string  | Resultado {
         
         if(this.retorno != null){
             const valor = this.retorno.interpretar(contexto)
-            return {valor:valor, tipo:"return"}
+            return {tipo:TipoDatos.RETURN,valor:valor}
         }
-        return {valor:{valor:null, tipo:TipoDatos.ERROR}, tipo:"return"}
+        return "return"
 
     }
 

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CFor = void 0;
+const Resultado_1 = require("../../expresion/Resultado");
 const Instruccion_1 = require("../Instruccion");
 class CFor extends Instruccion_1.Instruccion {
     constructor(declaracion, condicion, actualizacion, bloque, linea, columna) {
@@ -24,7 +25,7 @@ class CFor extends Instruccion_1.Instruccion {
                 }
             }
             else {
-                if ((retorno === null || retorno === void 0 ? void 0 : retorno.tipo) == "return") {
+                if ((retorno === null || retorno === void 0 ? void 0 : retorno.tipo) == Resultado_1.TipoDatos.RETURN) {
                     return retorno;
                 }
             }

@@ -13,7 +13,7 @@ export class CWhile extends Instruccion{
         this.condicion = condicion
         this.instrucciones = instrucciones
     }
-    public interpretar(contexto: Contexto, consola: string[]): null | string | Resultado_return | Resultado {
+    public interpretar(contexto: Contexto, consola: string[]): null | string |Resultado {
         let condicion = this.condicion.interpretar(contexto)    
         if (condicion.tipo != TipoDatos.BOOLEANO) throw new Error("La condicion no es booleana")
         while(condicion.valor){
@@ -30,9 +30,13 @@ export class CWhile extends Instruccion{
                 }
             } else {
 
-                if (retorno?.tipo == "return") {
+                if (retorno?.tipo == TipoDatos.RETURN) {
                     return retorno
                 }
+
+
+
+            
             }
             // Se calcula la condicion
             condicion = this.condicion.interpretar(contexto)

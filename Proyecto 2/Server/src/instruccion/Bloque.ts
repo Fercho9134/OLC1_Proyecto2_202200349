@@ -10,11 +10,16 @@ export class Bloque extends Instruccion{
         this.instrucciones = instrucciones;
     }
 
-    public interpretar(contexto:Contexto, consola: string[]): null | string | Resultado_return | Resultado{
+    public interpretar(contexto:Contexto, consola: string[]): null | string | Resultado{
         const nuevoContexto = new Contexto(contexto);
         for (const instruccion of this.instrucciones){
+            console.log(instruccion)
+            console.log("Consola",consola)
+
             const resultado = instruccion.interpretar(nuevoContexto, consola);
+            console.log(resultado)
             if(resultado) return resultado;
+            
         }
         return null;
     }

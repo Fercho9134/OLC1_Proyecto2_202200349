@@ -20,6 +20,10 @@ export class Simbolo {
     public actualizarValor(valor: Object){
         this.valor = valor;
     }
+
+    public obtenerTipo(){
+        return this.tipo;
+    }
 }
 
 export enum TipoSimbolo {

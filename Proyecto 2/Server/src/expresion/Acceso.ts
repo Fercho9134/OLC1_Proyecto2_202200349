@@ -12,7 +12,7 @@ export class Acceso extends Expresion{
     }
 
     public interpretar(contexto:Contexto): Resultado {
-        const simbolo = contexto.obtenerVariable(this.id);
+        const simbolo = contexto.obtenerSimbolo(this.id);
         if (simbolo){
             if(simbolo.tipoSimbolo == TipoSimbolo.VARIABLE){
                 const resultado = simbolo.obtenerValor() as Resultado

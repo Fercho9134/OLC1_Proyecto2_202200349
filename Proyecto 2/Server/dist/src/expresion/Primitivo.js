@@ -4,10 +4,11 @@ exports.Primitivo = void 0;
 const Expresion_1 = require("./Expresion");
 const Resultado_1 = require("./Resultado");
 class Primitivo extends Expresion_1.Expresion {
-    constructor(valor, tipo, linea, columna) {
+    constructor(valor, tipo, parsero, linea, columna) {
         super(linea, columna);
         this.valor = valor;
         this.tipo = tipo;
+        this.parseo = parsero;
     }
     interpretar() {
         if (this.tipo === Resultado_1.TipoDatos.ENTERO) {

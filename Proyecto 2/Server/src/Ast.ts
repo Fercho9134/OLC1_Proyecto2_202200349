@@ -22,13 +22,27 @@ export class AST {
     }
 
     public Ejecutar(){
+
        this.instrucciones.forEach(instruccion => {
+        try {
+            
+        
             if(instruccion instanceof Declaracion || instruccion instanceof Funcion){
                 instruccion.interpretar(this.contextoGlobal, this.consola)
             }
+
+        } catch (error: any) {
+            const salida = error.toString()
+            const consola_salidad = [new Primitivo(salida, TipoDatos.CADENA, false, 0, 0)]
+            const Cout_error = new Cout(consola_salidad, 0, 0)
+            Cout_error.interpretar(this.contextoGlobal, this.consola)
+        }
        });
 
          this.instrucciones.forEach(instruccion => {
+            try {
+                
+
                 if(instruccion instanceof Execute){
                  if(this.contadorExec == 0){
                     instruccion.interpretar(this.contextoGlobal, this.consola)
@@ -37,6 +51,15 @@ export class AST {
                     throw new Error("Error Semantico: No se puede ejecutar mas de una vez el execute")
                  }
                 }
+
+            } catch (error: any) {
+
+                const salida = error.toString()
+                const consola_salidad = [new Primitivo(salida, TipoDatos.CADENA,false, 0, 0)]
+                const Cout_error = new Cout(consola_salidad, 0, 0)
+                Cout_error.interpretar(this.contextoGlobal, this.consola)
+                
+            }
          });
 
 }

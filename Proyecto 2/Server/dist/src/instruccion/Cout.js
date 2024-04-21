@@ -10,7 +10,6 @@ class Cout extends Instruccion_1.Instruccion {
     interpretar(contexto, consola) {
         //Obtenemos la consola global que esta en el ast
         consola = contexto.obtenerGlobal().consola;
-        consola.push("\n");
         console.log("Cout");
         console.log("Impri", this.expresiones);
         this.expresiones.forEach(expresion => {

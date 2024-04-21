@@ -5,6 +5,7 @@ const parser = require("../analizador")
 function interprete (contenido:string){
     try {
         const ast = parser.parse(contenido)
+
         ast.Ejecutar()
         console.log("Analisis exitosa")
         return ast.getConsola()

@@ -24,6 +24,8 @@
     const {Funcion} = require('./dist/src/instruccion/definiciones/Funcion');
         const {Return} = require('./dist/src/instruccion/control/Return');
         const {Execute} = require('./dist/src/instruccion/Execute');
+        const {Switch} = require('./dist/src/instruccion/control/Switch');
+        const {Casteo} = require('./dist/src/expresion/Casteo');
 %}
 
 %lex // Inicia parte léxica
@@ -115,6 +117,7 @@
 /lex
 
 // precedencia
+%left 'PARIZQ'
 %left 'INTERROGACION'
 %right 'NOT'
 %left 'OR'
@@ -149,23 +152,24 @@ instruccion: cout PYC                    { $$ = $1;}
         |acceso_metodo PYC { $$ = $1;}
         |instruccion_return PYC { $$ = $1;}
         |execute PYC { $$ = $1;}
+        |switch_g { $$ = $1;}
 
 
 ;
 // Para sitetisar un dato, se utiliza $$
-expresion: RES expresion %prec UMINUS  { $$ = new Aritmetica(new Primitivo(0, TipoDatos.ENTERO, this._$.first_line, this._$.first_column), $2, OperadorAritmetico.RESTA, lexer.yylineno, lexer.yyleng); } 
+expresion: RES expresion %prec UMINUS  { $$ = new Aritmetica(new Primitivo(0, TipoDatos.ENTERO, false, this._$.first_line, this._$.first_column), $2, OperadorAritmetico.RESTA, lexer.yylineno, lexer.yyleng); } 
         | expresion MAS expresion      { $$ = new Aritmetica($1, $3, OperadorAritmetico.SUMA, this._$.first_line, this._$.first_column);}
         | expresion RES expresion       { $$ = new Aritmetica($1, $3, OperadorAritmetico.RESTA, this._$.first_line, this._$.first_column); }
         | expresion MUL expresion       { $$ = new Aritmetica($1, $3, OperadorAritmetico.MULTIPLICACION, this._$.first_line, this._$.first_column);}
         | expresion DIV expresion       { $$ =  new Aritmetica($1, $3, OperadorAritmetico.DIVISION, this._$.first_line, this._$.first_column); } 
         | expresion MOD expresion       { $$ = new Aritmetica($1, $3, OperadorAritmetico.MODULO, this._$.first_line, this._$.first_column); }
-        | ENTERO                        { $$ = new Primitivo($1, TipoDatos.ENTERO, this._$.first_line, this._$.first_column); }
-        | DOUBLE                        { $$ =  new Primitivo($1, TipoDatos.DOBLE, this._$.first_line, this._$.first_column); }
-        | CADENA                        { $$ = new Primitivo($1, TipoDatos.CADENA, this._$.first_line, this._$.first_column); }
-        | CARACTER                      { $$ = new Primitivo($1, TipoDatos.CARACTER, this._$.first_line, this._$.first_column); }
-        | TRUE                          { $$ = new Primitivo($1, TipoDatos.BOOLEANO, this._$.first_line, this._$.first_column); }
-        | FALSE                         { $$ = new Primitivo($1, TipoDatos.BOOLEANO, this._$.first_line, this._$.first_column); }
-        | ENDL                          { $$ = new Primitivo("\n", TipoDatos.CADENA, this._$.first_line, this._$.first_column); }
+        | ENTERO                        { $$ = new Primitivo($1, TipoDatos.ENTERO, false, this._$.first_line, this._$.first_column); }
+        | DOUBLE                        { $$ =  new Primitivo($1, TipoDatos.DOBLE, false, this._$.first_line, this._$.first_column); }
+        | CADENA                        { $$ = new Primitivo($1, TipoDatos.CADENA, false, this._$.first_line, this._$.first_column); }
+        | CARACTER                      { $$ = new Primitivo($1, TipoDatos.CARACTER, false, this._$.first_line, this._$.first_column); }
+        | TRUE                          { $$ = new Primitivo($1, TipoDatos.BOOLEANO, false, this._$.first_line, this._$.first_column); }
+        | FALSE                         { $$ = new Primitivo($1, TipoDatos.BOOLEANO, false, this._$.first_line, this._$.first_column); }
+        | ENDL                          { $$ = new Primitivo("\n", TipoDatos.CADENA, false, this._$.first_line, this._$.first_column); }
         | POW PARIZQ expresion COMA expresion PARDER { $$ = new Aritmetica($3, $5, OperadorAritmetico.POTENCIA, this._$.first_line, this._$.first_column); }
         | PARIZQ expresion PARDER       { $$ = $2; }
         | relacionales                  { $$ = $1; }
@@ -173,6 +177,7 @@ expresion: RES expresion %prec UMINUS  { $$ = new Aritmetica(new Primitivo(0, Ti
         | ID                            { $$ = new Acceso($1, this._$.first_line, this._$.first_column); }
         | expresion INTERROGACION expresion DOSPUNTOS expresion { $$ = new Ternario($1, $3, $5, this._$.first_line, this._$.first_column); }
         | acceso_metodo { $$ = $1; }
+        | PARIZQ tipos_datos PARDER expresion { $$ = new Casteo($4, $2, true, this._$.first_line, this._$.first_column); }
         ;   
 
 relacionales: expresion IGUAL expresion { $$ = new Relacional($1, $3, OperadorRelacional.IGUAL, this._$.first_line, this._$.first_column); }
@@ -275,3 +280,16 @@ execute: EXECUTE acceso_metodo { $$ = new Execute($2, this._$.first_line, this._
         ;
 
 
+switch_g: SWITCH PARIZQ expresion PARDER bloque_case { $$ = new Switch($3, $5, this._$.first_line, this._$.first_column); }
+        ;
+
+bloque_case: LLAVEIZQ casos LLAVEDER { $$ = $2; }
+            ;
+
+casos: casos caso { $1.push($2); $$ = $1; }
+        | caso { $$ = [$1]; }
+        ;
+
+caso: CASE expresion DOSPUNTOS instrucciones { $$ = {expresion: $2, instrucciones: new Bloque($4, 0, 0)}; }
+        | DEFAULT DOSPUNTOS instrucciones { $$ = {expresion: null, instrucciones: new Bloque($3, 0, 0)}; }
+        ;

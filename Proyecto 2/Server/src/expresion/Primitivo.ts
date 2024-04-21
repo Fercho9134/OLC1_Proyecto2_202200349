@@ -4,14 +4,17 @@ import { Resultado, TipoDatos } from "./Resultado";
 export class Primitivo extends Expresion {
     public valor: string;
     tipo: TipoDatos;
+    parseo:boolean;
 
-    constructor(valor: string, tipo:TipoDatos, linea: number, columna: number) {
+    constructor(valor: string, tipo:TipoDatos, parsero:boolean, linea: number, columna: number) {
         super(linea, columna);
         this.valor = valor;
         this.tipo = tipo;
+        this.parseo = parsero;
     }
 
     public interpretar(): Resultado {
+  
         if (this.tipo === TipoDatos.ENTERO) {
             return {valor: parseInt(this.valor), tipo: TipoDatos.ENTERO}
         } else if (this.tipo === TipoDatos.DOBLE) {
@@ -27,5 +30,6 @@ export class Primitivo extends Expresion {
             return {valor: this.valor, tipo: TipoDatos.CARACTER}
         }
         return {valor: null, tipo: TipoDatos.ERROR}
-    }
+    
+}
 }

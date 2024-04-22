@@ -24,4 +24,5 @@ var TipoSimbolo;
     TipoSimbolo[TipoSimbolo["VARIABLE"] = 0] = "VARIABLE";
     TipoSimbolo[TipoSimbolo["FUNCION"] = 1] = "FUNCION";
     TipoSimbolo[TipoSimbolo["METODO"] = 2] = "METODO";
+    TipoSimbolo[TipoSimbolo["ARREGLO"] = 3] = "ARREGLO";
 })(TipoSimbolo || (exports.TipoSimbolo = TipoSimbolo = {}));

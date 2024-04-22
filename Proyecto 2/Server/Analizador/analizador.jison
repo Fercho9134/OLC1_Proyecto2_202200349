@@ -26,6 +26,9 @@
         const {Execute} = require('./dist/src/instruccion/Execute');
         const {Switch} = require('./dist/src/instruccion/control/Switch');
         const {Casteo} = require('./dist/src/expresion/Casteo');
+        const {Acceso_Arreglos} = require('./dist/src/expresion/Acceso_Arreglos');
+        const {Arreglo} = require('./dist/src/instruccion/definiciones/Arreglo');
+        const {Asignacion_Arreglo} = require('./dist/src/instruccion/AsignacionArreglo');
 %}
 
 %lex // Inicia parte léxica
@@ -153,6 +156,8 @@ instruccion: cout PYC                    { $$ = $1;}
         |instruccion_return PYC { $$ = $1;}
         |execute PYC { $$ = $1;}
         |switch_g { $$ = $1;}
+        |declaracion_array PYC { $$ = $1;}
+        |asignacion_array PYC { $$ = $1;}
 
 
 ;
@@ -178,6 +183,7 @@ expresion: RES expresion %prec UMINUS  { $$ = new Aritmetica(new Primitivo(0, Ti
         | expresion INTERROGACION expresion DOSPUNTOS expresion { $$ = new Ternario($1, $3, $5, this._$.first_line, this._$.first_column); }
         | acceso_metodo { $$ = $1; }
         | PARIZQ tipos_datos PARDER expresion { $$ = new Casteo($4, $2, true, this._$.first_line, this._$.first_column); }
+        |acceso_array { $$ = $1; }
         ;   
 
 relacionales: expresion IGUAL expresion { $$ = new Relacional($1, $3, OperadorRelacional.IGUAL, this._$.first_line, this._$.first_column); }
@@ -293,3 +299,39 @@ casos: casos caso { $1.push($2); $$ = $1; }
 caso: CASE expresion DOSPUNTOS instrucciones { $$ = {expresion: $2, instrucciones: new Bloque($4, 0, 0)}; }
         | DEFAULT DOSPUNTOS instrucciones { $$ = {expresion: null, instrucciones: new Bloque($3, 0, 0)}; }
         ;
+
+declaracion_array: tipos_datos ID  lista_corchetes_declaracion ASIGNACION NEW tipos_datos lista_corchetes_declaracion { $$ = new Arreglo($1, $2, null, $7, this._$.first_line, this._$.first_column); }
+                | tipos_datos ID lista_corchetes_declaracion ASIGNACION CORIZQ lista_corchetes_valores_asignacion CORDER { $$ = new Arreglo($1, $2, $6, null, this._$.first_line, this._$.first_column); }
+                ;
+
+lista_corchetes_declaracion: lista_corchetes_declaracion valor_arreglo { $1.push($2); $$ = $1; }
+                            | valor_arreglo { $$ = [$1]; }
+                            ;
+
+valor_arreglo: CORIZQ expresion CORDER { $$ = $2; }
+                | CORIZQ CORDER { $$ = null; }
+            ;
+
+//La lista corchetes valores examinara una lista de la forma [1,2,3,4,5] o [[1,2,3], [4,5,6]]
+//En caso de ser una lista de una dimension, se guardara en un arreglo de una dimension
+//En caso de ser una lista de dos dimensiones, se guardara en un arreglo de dos dimensiones
+
+lista_corchetes_valores: lista_corchetes_valores valor_arreglo { $1.push($2); $$ = $1; }
+                        | valor_arreglo { $$ = [$1]; }
+                        ;
+
+lista_corchetes_valores_asignacion: lista_corchetes_valores_asignacion COMA elemento { $1.push($3); $$ = $1; }
+                                        | elemento { $$ = [$1]; }
+                                        ;
+
+elemento: expresion { $$ = $1; }
+        | CORIZQ lista_corchetes_valores_asignacion CORDER { $$ = $2; }
+        ;
+
+acceso_array: ID lista_corchetes_valores { $$ = new Acceso_Arreglos($1, $2, this._$.first_line, this._$.first_column); }
+
+;
+asignacion_array: ID lista_corchetes_valores ASIGNACION expresion { $$ = new Asignacion_Arreglo($1, $2, $4, this._$.first_line, this._$.first_column); }
+                ;
+
+

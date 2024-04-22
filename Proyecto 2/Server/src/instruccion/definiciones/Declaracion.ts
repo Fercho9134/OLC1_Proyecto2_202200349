@@ -7,9 +7,9 @@ import { Instruccion } from "../Instruccion";
 export class Declaracion extends Instruccion{
     tipo:TipoDatos
     id:string[]
-    expresion:Expresion
+    expresion:any
 
-    constructor(tipo:TipoDatos,id:string[],expresion:Expresion,linea:number,columna:number){
+    constructor(tipo:TipoDatos,id:string[],expresion:any,linea:number,columna:number){
         super(linea,columna)
         this.tipo = tipo
         this.id = id

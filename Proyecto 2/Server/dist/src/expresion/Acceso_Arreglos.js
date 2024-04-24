@@ -21,14 +21,8 @@ class Acceso_Arreglos extends Expresion_1.Expresion {
             const simbolo_a = contexto.obtenerSimbolo(this.id);
             if (simbolo_a) {
                 if (simbolo_a.tipoSimbolo == Simbolo_1.TipoSimbolo.ARREGLO) {
-                    //Obtenemos la subvariable
-                    const subVariable = contexto.obtenerSimbolo(`${this.id}@$${direccion}`);
-                    if (subVariable) {
-                        //Obtenemos el valor de la subvariable
-                        const resultado = subVariable.obtenerValor();
-                        return { valor: resultado.valor, tipo: resultado.tipo };
-                    }
-                    throw new Error(`No existe la subvariable ${this.id}@$${direccion}`);
+                    let vector = simbolo_a.obtenerValor();
+                    return vector[direccion];
                 }
                 throw new Error(`El simbolo ${this.id} no es un arreglo`);
             }
@@ -42,14 +36,8 @@ class Acceso_Arreglos extends Expresion_1.Expresion {
             const simbolo_a = contexto.obtenerSimbolo(this.id);
             if (simbolo_a) {
                 if (simbolo_a.tipoSimbolo == Simbolo_1.TipoSimbolo.ARREGLO) {
-                    //Obtenemos la subvariable
-                    const subVariable = contexto.obtenerSimbolo(`${this.id}@$${direccion1}@$${direccion2}`);
-                    if (subVariable) {
-                        //Obtenemos el valor de la subvariable
-                        const resultado = subVariable.obtenerValor();
-                        return { valor: resultado.valor, tipo: resultado.tipo };
-                    }
-                    throw new Error(`No existe la subvariable ${this.id}@$${direccion1}@$${direccion2}`);
+                    let vector = simbolo_a.obtenerValor();
+                    return vector[direccion1][direccion2];
                 }
                 throw new Error(`El simbolo ${this.id} no es un arreglo`);
             }

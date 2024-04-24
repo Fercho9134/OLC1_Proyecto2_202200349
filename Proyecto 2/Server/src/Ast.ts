@@ -32,6 +32,7 @@ export class AST {
             }
 
         } catch (error: any) {
+            console.log(error)
             const salida = error.toString()
             const consola_salidad = [new Primitivo(salida, TipoDatos.CADENA, false, 0, 0)]
             const Cout_error = new Cout(consola_salidad, 0, 0)
@@ -53,6 +54,7 @@ export class AST {
                 }
 
             } catch (error: any) {
+                console.log(error)
 
                 const salida = error.toString()
                 const consola_salidad = [new Primitivo(salida, TipoDatos.CADENA,false, 0, 0)]

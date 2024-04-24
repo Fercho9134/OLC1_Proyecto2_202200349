@@ -8,10 +8,10 @@ import { Declaracion } from "./Declaracion";
 export class Arreglo extends Instruccion {
     tipo: TipoDatos;
     id: string;
-    valores: Expresion[][];
-    dimensiones:Expresion[];
+    valores: any[];
+    dimensiones:any[];
 
-    constructor(tipo: TipoDatos, id: string, valores: Expresion[][], dimensiones:Expresion[], linea: number, columna: number) {
+    constructor(tipo: TipoDatos, id: string, valores: any[], dimensiones:any[], linea: number, columna: number) {
         super(linea, columna);
         this.tipo = tipo;
         this.id = id;
@@ -20,77 +20,99 @@ export class Arreglo extends Instruccion {
     }
 
     public interpretar(contexto: Contexto, consola:string[]): null {
-        contexto.guardarSimbolo(this.id, this, this.tipo, TipoSimbolo.ARREGLO);
 
-        console.log("Valores: ", this.valores);
-        console.log("Dimensiones: ", this.dimensiones);
-        console.log("Fina");
-
-
-
-        //Creamos las subvariables del arreglo con el nombre del arreglo y el indice asi: id@$indice... por cada dimension, si es de dos dimensiones, entonces id@$indice1@$indice2
-        //la cantidad de subvariables es igual al producto de las dimensiones
-        //Hay dos opciones de crear el arreglo, si la lista de valores es null, entonces tenemos que crear un arreglo vacio
-        //con la cantidad de subvariables igual al producto de las dimensiones. Si la lista de valores no es null, entonces
-        //no tenemos las dimensiones, por lo que tenemos que crear un arreglo con la cantidad de subvariables igual a la cantidad
         //de valores que tenemos.
         if(this.valores == null){
-            //Si el arreglo es de una dimension solo se hará un for, si es de dos dimensiones se harán dos for anidados con el numero de filas y columnas
-            let cantidadSubVariables = 1;
-            for(let i = 0; i < this.dimensiones.length; i++){
-                cantidadSubVariables = cantidadSubVariables * this.dimensiones[i].interpretar(contexto).valor;
+            
+            //Contamos las dimensiones que tenemos.
+            let cantidadDimensiones = this.dimensiones.length;
+            let dimensiones = [];
+            for(let i = 0; i < cantidadDimensiones; i++){
+                dimensiones.push(this.dimensiones[i].interpretar(contexto).valor);
             }
 
-            if(this.dimensiones.length == 1){
-                for(let i = 0; i < cantidadSubVariables; i++){
-                    const nueva = new Declaracion(this.tipo, [`${this.id}@$${i}`], null, this.linea, this.columna);
-                    nueva.interpretar(contexto, consola);
-                }
-            }else if (this.dimensiones.length == 2) {
-                // Obtener el número de elementos en la lista general
-                for (let i = 0; i < this.dimensiones[0].interpretar(contexto).valor; i++) {
-                    for (let j = 0; j < this.dimensiones[1].interpretar(contexto).valor; j++) {
-                        const nueva = new Declaracion(this.tipo, [`${this.id}@$${i}@$${j}`], null, this.linea, this.columna);
-                        nueva.interpretar(contexto, consola);
-                    }
+            let valorDefecto;
+            let tipoDefecto;
+
+            //Obtenemos los valores por defecto.
+            if(this.tipo == TipoDatos.ENTERO){
+                valorDefecto = 0;
+                tipoDefecto = TipoDatos.ENTERO;
+            }else if(this.tipo == TipoDatos.DOBLE){
+                valorDefecto = 0.0;
+                tipoDefecto = TipoDatos.DOBLE;
+            }else if(this.tipo == TipoDatos.CARACTER){
+                valorDefecto = '0';
+                tipoDefecto = TipoDatos.CARACTER;
+            }else if(this.tipo == TipoDatos.BOOLEANO){
+                valorDefecto = true;
+                tipoDefecto = TipoDatos.BOOLEANO;
+            }else if(this.tipo == TipoDatos.CADENA){
+                valorDefecto = "";
+                tipoDefecto = TipoDatos.CADENA;
+            }
+
+            //Si es un arreglo de una dimension. Entonces llenamos el array con valores predeterminados.
+            if(cantidadDimensiones == 1){
+                this.valores = [];
+                for(let i = 0; i < dimensiones[0]; i++){
+                    this.valores.push({valor:valorDefecto,tipo:tipoDefecto});
                 }
             }
-            
+
+            //Si es un arreglo de dos dimensiones. Entonces llenamos el array con valores predeterminados.
+            if(cantidadDimensiones == 2){
+                this.valores = [];
+                for(let i = 0; i < dimensiones[0]; i++){
+                    let temp = [];
+                    for(let j = 0; j < dimensiones[1]; j++){
+                        temp.push({valor:valorDefecto,tipo:tipoDefecto});
+                    }
+                    this.valores.push(temp);
+                }
+            }
         }else{
-            //Los valores vendran en una lista asi: [ [1, 2], [3, 4] ]; si es de dos dimensiones
-            //Si es de una dimension vendra asi: [1, 2, 3, 4]
+            //Si tenemos los valores entonces los llenamos
+            let cantidadDimensiones = 1
+            if(this.valores[0] instanceof Array){
+                cantidadDimensiones = 2;
+            }
 
-            //Si el arreglo es de una dimension solo se hará un for, si es de dos dimensiones se harán dos for anidados con el numero de filas y columnas
-            let dimensiones = this.valores.length == 1 ? 1 : 2;
-
-            if(dimensiones == 1){
+            if(cantidadDimensiones ==1){
                 for(let i = 0; i < this.valores.length; i++){
-                    const nueva = new Declaracion(this.tipo, [`${this.id}@$${i}`], this.valores[0][i], this.linea, this.columna);
-                    nueva.interpretar(contexto, consola);
-                    console.log("Nueva: ", nueva);
+                    let valor =this.valores[i].interpretar(contexto);
+                    if (valor.tipo == this.tipo){
+                        this.valores[i]=valor;
+                    }else{
+                        throw new Error(`Error semantico: No se puede asignar un valor de tipo ${valor.tipo} a una subvariable de tipo ${this.tipo} en la linea ${this.linea} y columna ${this.columna}`)
+                    }
                 }
-
-            }else if (dimensiones == 2) {
-                
-                for (let i = 0; i < this.valores.length; i++) {
-                    for (let j = 0; j < this.valores[i].length; j++) {
-                        const nueva = new Declaracion(this.tipo, [`${this.id}@$${i}@$${j}`], this.valores[i][j], this.linea, this.columna);
-                        nueva.interpretar(contexto, consola);
-                        console.log("Nueva: ", nueva);
+            }else if(cantidadDimensiones == 2){
+                for(let i = 0; i < this.valores.length; i++){
+                    for(let j = 0; j < this.valores[i].length; j++){
+                        let valor =this.valores[i][j].interpretar(contexto);
+                        if (valor.tipo == this.tipo){
+                            this.valores[i][j]=valor;
+                        }else{
+                            throw new Error(`Error semantico: No se puede asignar un valor de tipo ${valor.tipo} a una subvariable de tipo ${this.tipo} en la linea ${this.linea} y columna ${this.columna}`)
+                        }
                     }
                 }
             }
             
-            
-            
-
-
         }
+        
+        //Creamos el simbolo del arreglo
+        contexto.guardarSimbolo(this.id, this.valores, this.tipo, TipoSimbolo.ARREGLO);
 
+        
 
+    
 
         return null;
     }
+
+
 
     
 }

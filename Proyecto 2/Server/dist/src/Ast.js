@@ -23,6 +23,7 @@ class AST {
                 }
             }
             catch (error) {
+                console.log(error);
                 const salida = error.toString();
                 const consola_salidad = [new Primitivo_1.Primitivo(salida, Resultado_1.TipoDatos.CADENA, false, 0, 0)];
                 const Cout_error = new Cout_1.Cout(consola_salidad, 0, 0);
@@ -42,6 +43,7 @@ class AST {
                 }
             }
             catch (error) {
+                console.log(error);
                 const salida = error.toString();
                 const consola_salidad = [new Primitivo_1.Primitivo(salida, Resultado_1.TipoDatos.CADENA, false, 0, 0)];
                 const Cout_error = new Cout_1.Cout(consola_salidad, 0, 0);

@@ -28,14 +28,11 @@ export class Acceso_Arreglos extends Expresion{
             const simbolo_a = contexto.obtenerSimbolo(this.id);
             if (simbolo_a){
                 if(simbolo_a.tipoSimbolo == TipoSimbolo.ARREGLO){
-                    //Obtenemos la subvariable
-                    const subVariable = contexto.obtenerSimbolo(`${this.id}@$${direccion}`);
-                    if (subVariable){
-                        //Obtenemos el valor de la subvariable
-                        const resultado = subVariable.obtenerValor() as Resultado;
-                        return {valor: resultado.valor, tipo: resultado.tipo};
-                    }
-                    throw new Error(`No existe la subvariable ${this.id}@$${direccion}`);
+                    
+                    let vector = simbolo_a.obtenerValor() as Resultado[];
+
+                    return vector[direccion];
+
                 }
                 throw new Error(`El simbolo ${this.id} no es un arreglo`);
             }
@@ -49,14 +46,11 @@ export class Acceso_Arreglos extends Expresion{
             const simbolo_a = contexto.obtenerSimbolo(this.id);
             if (simbolo_a){
                 if(simbolo_a.tipoSimbolo == TipoSimbolo.ARREGLO){
-                    //Obtenemos la subvariable
-                    const subVariable = contexto.obtenerSimbolo(`${this.id}@$${direccion1}@$${direccion2}`);
-                    if (subVariable){
-                        //Obtenemos el valor de la subvariable
-                        const resultado = subVariable.obtenerValor() as Resultado;
-                        return {valor: resultado.valor, tipo: resultado.tipo};
-                    }
-                    throw new Error(`No existe la subvariable ${this.id}@$${direccion1}@$${direccion2}`);
+                    
+                    let vector = simbolo_a.obtenerValor() as Resultado[][];
+
+                    return vector[direccion1][direccion2];
+                    
                 }
                 throw new Error(`El simbolo ${this.id} no es un arreglo`);
             }

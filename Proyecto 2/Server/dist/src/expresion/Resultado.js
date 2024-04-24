@@ -3,14 +3,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.OperadorLogico = exports.OperadorRelacional = exports.OperadorAritmetico = exports.TipoDatos = void 0;
 var TipoDatos;
 (function (TipoDatos) {
-    TipoDatos["ENTERO"] = "ENTERO";
-    TipoDatos["DOBLE"] = "DOBLE";
-    TipoDatos["BOOLEANO"] = "BOOLEANO";
-    TipoDatos["CADENA"] = "CADENA";
-    TipoDatos["CARACTER"] = "CARACTER";
-    TipoDatos["ERROR"] = "ERROR";
-    TipoDatos["VOID"] = "VOID";
-    TipoDatos["RETURN"] = "RETURN";
+    TipoDatos["ENTERO"] = "Int";
+    TipoDatos["DOBLE"] = "Double";
+    TipoDatos["BOOLEANO"] = "Bool";
+    TipoDatos["CADENA"] = "String";
+    TipoDatos["CARACTER"] = "Char";
+    TipoDatos["ERROR"] = "Error";
+    TipoDatos["VOID"] = "Void";
+    TipoDatos["RETURN"] = "Return";
+    TipoDatos["ARREGLO"] = "Arreglo";
 })(TipoDatos || (exports.TipoDatos = TipoDatos = {}));
 var OperadorAritmetico;
 (function (OperadorAritmetico) {

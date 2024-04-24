@@ -1,5 +1,6 @@
 import { Simbolo, TipoSimbolo } from "../../contexto/Simbolo";
 import { Contexto } from "../../contexto/TablaSimbolo";
+import { C_STR } from "../../expresion/C_STR";
 import { Expresion } from "../../expresion/Expresion";
 import { TipoDatos } from "../../expresion/Resultado";
 import { Instruccion } from "../Instruccion";
@@ -72,6 +73,12 @@ export class Arreglo extends Instruccion {
                 }
             }
         }else{
+
+            if (this.valores instanceof C_STR){
+                this.valores = this.valores.interpretar(contexto).valor;
+            }
+
+
             //Si tenemos los valores entonces los llenamos
             let cantidadDimensiones = 1
             if(this.valores[0] instanceof Array){

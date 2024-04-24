@@ -12,7 +12,7 @@ export function EditorT() {
   const handleFileOpen = () => {
     const input = document.createElement('input');
     input.type = 'file';
-    input.accept = '.txt'; // Puedes ajustar esto para aceptar diferentes tipos de archivos
+    input.accept = '.sc'; // Puedes ajustar esto para aceptar diferentes tipos de archivos
     
     input.onchange = (event) => {
       const file = event.target.files[0];

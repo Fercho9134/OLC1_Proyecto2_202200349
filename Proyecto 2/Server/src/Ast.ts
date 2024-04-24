@@ -7,6 +7,7 @@ import { Declaracion } from "./instruccion/definiciones/Declaracion";
 import { Funcion } from "./instruccion/definiciones/Funcion";
 import { Execute } from "./instruccion/Execute";
 import { Cout } from "./instruccion/Cout";
+import { Arreglo } from "./instruccion/definiciones/Arreglo";
 
 export class AST {
     public instrucciones: Instruccion[];

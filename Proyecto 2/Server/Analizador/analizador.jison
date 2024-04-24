@@ -29,6 +29,13 @@
         const {Acceso_Arreglos} = require('./dist/src/expresion/Acceso_Arreglos');
         const {Arreglo} = require('./dist/src/instruccion/definiciones/Arreglo');
         const {Asignacion_Arreglo} = require('./dist/src/instruccion/AsignacionArreglo');
+        const {To_Lower} = require('./dist/src/expresion/To_Lower');
+        const {To_Upper} = require('./dist/src/expresion/To_Upper');
+        const {Round} = require('./dist/src/expresion/Round');
+        const {Length} = require('./dist/src/expresion/Length');
+        const {TypeOf} = require('./dist/src/expresion/TypeOf');
+        const {ToString} = require('./dist/src/expresion/ToString');
+        const {C_STR} = require('./dist/src/expresion/C_STR');
 %}
 
 %lex // Inicia parte léxica
@@ -47,6 +54,7 @@
 "bool"                return 'BOOL';
 "char"               return 'CHAR';
 "std::string"         return 'CADENA_ID';
+"std::tostring"    return 'TOSTRING';
 "EXEC"                  return 'EXEC';
 "true"                 return 'TRUE';
 "false"                return 'FALSE';
@@ -103,6 +111,7 @@
 "*"                     return 'MUL';
 "/"                     return 'DIV';
 ";"                     return 'PYC';
+"."                return 'PUNTO';
 
 
 \'(?:\\.|[^\'])*\'				{ yytext = yytext.substr(1,yyleng-2); return 'CARACTER'; }
@@ -184,7 +193,14 @@ expresion: RES expresion %prec UMINUS  { $$ = new Aritmetica(new Primitivo(0, Ti
         | acceso_metodo { $$ = $1; }
         | PARIZQ tipos_datos PARDER expresion { $$ = new Casteo($4, $2, true, this._$.first_line, this._$.first_column); }
         |acceso_array { $$ = $1; }
-        ;   
+        |TOLOWER PARIZQ expresion PARDER { $$ = new To_Lower($3, this._$.first_line, this._$.first_column); }
+        |TOUPPER PARIZQ expresion PARDER { $$ = new To_Upper($3, this._$.first_line, this._$.first_column); }
+        |ROUND PARIZQ expresion PARDER { $$ = new Round($3, this._$.first_line, this._$.first_column); }
+        |ID PUNTO LENGTH PARIZQ PARDER { $$ = new Length($1, this._$.first_line, this._$.first_column); }
+        |TYPEOF PARIZQ expresion PARDER { $$ = new TypeOf($3, this._$.first_line, this._$.first_column); }
+        |TOSTRING PARIZQ expresion PARDER { $$ = new ToString($3, this._$.first_line, this._$.first_column); }
+        |ID PUNTO C_STR PARIZQ PARDER { $$ = new C_STR($1, this._$.first_line, this._$.first_column); }
+        ; 
 
 relacionales: expresion IGUAL expresion { $$ = new Relacional($1, $3, OperadorRelacional.IGUAL, this._$.first_line, this._$.first_column); }
             | expresion DISTINTO expresion { $$ = new Relacional($1, $3, OperadorRelacional.DIFERENTE, this._$.first_line, this._$.first_column); }
@@ -302,6 +318,7 @@ caso: CASE expresion DOSPUNTOS instrucciones { $$ = {expresion: $2, instruccione
 
 declaracion_array: tipos_datos ID  lista_corchetes_declaracion ASIGNACION NEW tipos_datos lista_corchetes_declaracion { $$ = new Arreglo($1, $2, null, $7, this._$.first_line, this._$.first_column); }
                 | tipos_datos ID lista_corchetes_declaracion ASIGNACION CORIZQ lista_corchetes_valores_asignacion CORDER { $$ = new Arreglo($1, $2, $6, null, this._$.first_line, this._$.first_column); }
+                | tipos_datos ID lista_corchetes_declaracion ASIGNACION expresion { $$ = new Arreglo($1, $2, $5, null, this._$.first_line, this._$.first_column); }
                 ;
 
 lista_corchetes_declaracion: lista_corchetes_declaracion valor_arreglo { $1.push($2); $$ = $1; }
@@ -333,5 +350,3 @@ acceso_array: ID lista_corchetes_valores { $$ = new Acceso_Arreglos($1, $2, this
 ;
 asignacion_array: ID lista_corchetes_valores ASIGNACION expresion { $$ = new Asignacion_Arreglo($1, $2, $4, this._$.first_line, this._$.first_column); }
                 ;
-
-

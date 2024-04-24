@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Arreglo = void 0;
 const Simbolo_1 = require("../../contexto/Simbolo");
+const C_STR_1 = require("../../expresion/C_STR");
 const Resultado_1 = require("../../expresion/Resultado");
 const Instruccion_1 = require("../Instruccion");
 class Arreglo extends Instruccion_1.Instruccion {
@@ -64,6 +65,9 @@ class Arreglo extends Instruccion_1.Instruccion {
             }
         }
         else {
+            if (this.valores instanceof C_STR_1.C_STR) {
+                this.valores = this.valores.interpretar(contexto).valor;
+            }
             //Si tenemos los valores entonces los llenamos
             let cantidadDimensiones = 1;
             if (this.valores[0] instanceof Array) {

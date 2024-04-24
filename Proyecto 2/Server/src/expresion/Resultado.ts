@@ -17,14 +17,15 @@ export type variables = {
 }
 
 export enum TipoDatos{
-    ENTERO = "ENTERO",
-    DOBLE = "DOBLE",
-    BOOLEANO= "BOOLEANO",
-    CADENA= "CADENA",
-    CARACTER= "CARACTER",
-    ERROR= "ERROR",
-    VOID = "VOID",
-    RETURN = "RETURN"
+    ENTERO = "Int",
+    DOBLE = "Double",
+    BOOLEANO= "Bool",
+    CADENA= "String",
+    CARACTER= "Char",
+    ERROR= "Error",
+    VOID = "Void",
+    RETURN = "Return",
+    ARREGLO = "Arreglo"
 }
 
 export enum OperadorAritmetico{

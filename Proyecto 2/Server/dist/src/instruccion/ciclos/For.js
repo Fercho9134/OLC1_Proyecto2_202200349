@@ -15,6 +15,7 @@ class CFor extends Instruccion_1.Instruccion {
         this.declaracion.interpretar(contexto, consola);
         while (this.condicion.interpretar(contexto).valor) {
             const retorno = this.bloque.interpretar(contexto, consola);
+            this.actualizacion.interpretar(contexto, consola);
             if (typeof retorno == "string") {
                 if (retorno == "break") {
                     console.log("break");
@@ -29,7 +30,6 @@ class CFor extends Instruccion_1.Instruccion {
                     return retorno;
                 }
             }
-            this.actualizacion.interpretar(contexto, consola);
         }
         return null;
     }

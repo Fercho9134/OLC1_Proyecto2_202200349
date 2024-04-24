@@ -15,7 +15,6 @@ export class Acceso_Arreglos extends Expresion{
 
     public interpretar(contexto:Contexto): Resultado {
 
-
         //Obtenemos la cantidad de dimensiones que tiene el arreglo
         //Recordar que solo accederemos al nombre de la subvariable que tendran el nombre id@$posicion o id@$posicion@$posicion
         let cantidadDimensiones = this.direccion.length;

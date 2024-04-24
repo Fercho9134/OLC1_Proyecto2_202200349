@@ -5,15 +5,15 @@ import { TipoSimbolo } from "../contexto/Simbolo";
 import { Acceso } from "./Acceso";
 
 export class Length extends Expresion{
-    id: Acceso;
+    id: string;
 
-    constructor(id: Acceso, fila: number, columna: number){
+    constructor(id: string, fila: number, columna: number){
         super(fila, columna);
         this.id = id;
     }
 
     public interpretar(contexto:Contexto): Resultado {
-        const simbolo = contexto.obtenerSimbolo(this.id.id);
+        const simbolo = contexto.obtenerSimbolo(this.id);
         if (simbolo){
             if(simbolo.tipoSimbolo == TipoSimbolo.ARREGLO){
                 const vector = simbolo.obtenerValor() as Resultado[]

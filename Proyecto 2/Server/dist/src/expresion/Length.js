@@ -10,7 +10,7 @@ class Length extends Expresion_1.Expresion {
         this.id = id;
     }
     interpretar(contexto) {
-        const simbolo = contexto.obtenerSimbolo(this.id.id);
+        const simbolo = contexto.obtenerSimbolo(this.id);
         if (simbolo) {
             if (simbolo.tipoSimbolo == Simbolo_1.TipoSimbolo.ARREGLO) {
                 const vector = simbolo.obtenerValor();

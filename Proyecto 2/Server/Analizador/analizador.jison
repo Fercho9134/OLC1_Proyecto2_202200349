@@ -318,7 +318,6 @@ caso: CASE expresion DOSPUNTOS instrucciones { $$ = {expresion: $2, instruccione
 
 declaracion_array: tipos_datos ID  lista_corchetes_declaracion ASIGNACION NEW tipos_datos lista_corchetes_declaracion { $$ = new Arreglo($1, $2, null, $7, this._$.first_line, this._$.first_column); }
                 | tipos_datos ID lista_corchetes_declaracion ASIGNACION CORIZQ lista_corchetes_valores_asignacion CORDER { $$ = new Arreglo($1, $2, $6, null, this._$.first_line, this._$.first_column); }
-                | tipos_datos ID lista_corchetes_declaracion ASIGNACION expresion { $$ = new Arreglo($1, $2, $5, null, this._$.first_line, this._$.first_column); }
                 ;
 
 lista_corchetes_declaracion: lista_corchetes_declaracion valor_arreglo { $1.push($2); $$ = $1; }

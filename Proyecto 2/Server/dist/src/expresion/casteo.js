@@ -13,6 +13,7 @@ class Casteo extends Expresion_1.Expresion {
         const resultado = this.valor.interpretar(contexto);
         //De algo a int
         if (this.tipo_fin === Resultado_1.TipoDatos.ENTERO) {
+            console.log("Casteo a entero", resultado);
             if (resultado.tipo === Resultado_1.TipoDatos.DOBLE) {
                 return { valor: (Math.floor(resultado.valor)), tipo: Resultado_1.TipoDatos.ENTERO };
             }
@@ -41,6 +42,8 @@ class Casteo extends Expresion_1.Expresion {
                 return { valor: String.fromCharCode(resultado.valor), tipo: Resultado_1.TipoDatos.CARACTER };
             }
         }
+        console.log("Error en casteo", resultado);
+        console.log("Error en casteo", this.tipo_fin, resultado.tipo);
         return { valor: null, tipo: Resultado_1.TipoDatos.ERROR };
     }
 }

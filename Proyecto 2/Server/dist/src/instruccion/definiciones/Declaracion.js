@@ -13,6 +13,7 @@ class Declaracion extends Instruccion_1.Instruccion {
     }
     interpretar(contexto, consola) {
         let valor = null;
+        console.log("this.expresion", this.expresion);
         if (this.expresion != null) {
             valor = this.expresion.interpretar(contexto);
         }

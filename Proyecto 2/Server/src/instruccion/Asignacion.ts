@@ -23,6 +23,16 @@ export class Asignacion extends Instruccion{
                 const nuevoValor = this.expresion.interpretar(contexto)
                 
                 if (nuevoValor.tipo != simbolo.tipo){
+                    console.log("nuevoValor",nuevoValor)
+                    throw new Error(`Error semantico: No se puede asignar un valor de tipo ${nuevoValor.tipo} a una variable de tipo ${simbolo.tipo} en la linea ${this.linea} y columna ${this.columna}`)
+                }
+                simbolo.actualizarValor(nuevoValor)
+                contexto.actualizarSimbolo(this.id,simbolo)
+                return null
+            }else if(simbolo.tipoSimbolo == TipoSimbolo.ARREGLO){
+                //Arreglo
+                const nuevoValor = this.expresion.interpretar(contexto)
+                if (nuevoValor.tipo != simbolo.tipo){
                     throw new Error(`Error semantico: No se puede asignar un valor de tipo ${nuevoValor.tipo} a una variable de tipo ${simbolo.tipo} en la linea ${this.linea} y columna ${this.columna}`)
                 }
                 simbolo.actualizarValor(nuevoValor)

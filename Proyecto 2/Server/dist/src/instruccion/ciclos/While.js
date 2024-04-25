@@ -32,6 +32,8 @@ class CWhile extends Instruccion_1.Instruccion {
             }
             // Se calcula la condicion
             condicion = this.condicion.interpretar(contexto);
+            console.log("condicion", condicion);
+            console.log("condicion", this.condicion);
         }
         return null;
     }

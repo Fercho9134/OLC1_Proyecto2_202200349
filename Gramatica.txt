@@ -1,0 +1,199 @@
+<ini> ::= <instrucciones> EOF
+
+
+<instrucciones> ::= <instrucciones> <instruccion>  
+            | <instruccion>                  
+
+
+<instruccion>::= <cout> PYC                   
+            | <if_g>                      
+            |<declaracion> PYC               
+            | <asignacion> PYC                
+            |<ciclo_while>                
+            |<instruccion_break> PYC        
+            |<instruccion_continue> PYC     
+            |<ciclo_do_while>            
+             |<incremento PYC>
+             |<for_g>
+        |<declaracion_metodo> 
+        |<acceso_metodo> PYC 
+        |<instruccion_return> PYC 
+        |<execute> PYC 
+        |<switch_g> 
+        |<declaracion_array> PYC 
+        |<asignacion_array> PYC 
+
+
+
+<expresion> ::= RES <expresion>
+        | <expresion> MAS <expresion>      
+        | <expresion>  RES <expresion> 
+        | <expresion>  MUL <expresion>        
+        | <expresion>  DIV <expresion>         
+        | <expresion>  MOD <expresion>        
+        | ENTERO                        
+        | DOUBLE                       
+        | CADENA                    
+        | CARACTER                 
+        | TRUE                       
+        | FALSE                     
+        | ENDL                          
+        | POW PARIZQ <expresion> COMA <expresion>  PARDER
+        | PARIZQ <expresion>  PARDER     
+        | <relacionales>            
+        | <logico>                     
+        | ID                         
+        | expresion INTERROGACION <expresion>  DOSPUNTOS <expresion> 
+        | <acceso_metodo>
+        | PARIZQ <tipos_datos> PARDER <expresion> 
+        |<acceso_array> 
+        |TOLOWER PARIZQ <expresion>  PARDER 
+        |TOUPPER PARIZQ <expresion>  PARDER 
+        |ROUND PARIZQ <expresion>  PARDER 
+        |ID PUNTO LENGTH PARIZQ PARDER 
+        |TYPEOF PARIZQ <expresion>  PARDER 
+        |TOSTRING PARIZQ <expresion>  PARDER
+        |ID PUNTO C_STR PARIZQ PARDER 
+        
+
+<relacionales> ::= <expresion>  IGUAL <expresion> 
+            | <expresion>  DISTINTO <expresion>  
+            | <expresion>  MENOR <expresion>  
+            | <expresion>  MENORIGUAL <expresion>  
+            | <expresion>  MAYOR <expresion>  
+            | <expresion>  MAYORIGUAL <expresion>  
+            
+
+<logico> ::= <expresion> AND <expresion> 
+        | <expresion>  OR <expresion> 
+        | NOT <expresion>  
+        
+
+<bloque>::= LLAVEIZQ <instrucciones> LLAVEDER
+        | LLAVEIZQ LLAVEDER
+        
+
+<cout> ::= COUT OUTPUT <lista_expresiones>
+
+<lista_expresiones>: <lista_expresiones> OUTPUT <expresion>
+                 | <expresion>
+
+
+<if_g> ::= IF PARIZQ <expresion> PARDER <bloque>
+    | IF PARIZQ <expresion> PARDER <bloque> ELSE <bloque> 
+    | IF PARIZQ <expresion> PARDER <bloque> ELSE <if_g> 
+
+
+<incremento> ::= ID MAS MAS
+        | ID RES RES
+
+
+
+<tipos_datos> ::= INT 
+            | DOUBLE_ID 
+            | BOOL 
+            | CHAR
+            | CADENA_ID
+            | VOID
+            
+
+<lista_ids> ::= <lista_ids> COMA ID 
+            | ID 
+            
+
+<declaracion> ::= <tipos_datos> <lista_ids> ASIGNACION <expresion>
+               | <tipos_datos lista_ids>
+                
+
+
+
+<asignacion> ::= ID ASIGNACION <expresion>            
+  
+
+<ciclo_while> ::= WHILE PARIZQ <expresion> PARDER <bloque>
+            
+<instruccion_break> ::= BREAK
+            
+<instruccion_continue> ::= CONTINUE
+            
+
+<instruccion_return> ::= RETURN <expresion>
+                | RETURN            
+
+<ciclo_do_while> ::= DO <bloque> WHILE PARIZQ <expresion> PARDER 
+            
+
+<for_g> ::= FOR PARIZQ <declaracion> PYC <expresion> PYC <actalizacion> PARDER <bloque>
+        
+
+<actalizacion> ::= <incremento>
+            | <asignacion>
+            
+
+<declaracion_metodo> ::= <tipos_datos> ID PARIZQ <lista_parametros> PARDER <bloque>
+                | <tipos_datos> ID PARIZQ PARDER <bloque>
+                
+
+<lista_parametros> ::= <lista_parametros> COMA <parametro>
+                | <parametro>
+                
+
+<parametro> ::=  <tipos_datos> ID
+        
+
+<lista_parametros_acceso> ::= <lista_parametros_acceso> COMA <expresion>
+                    | <expresion> 
+
+
+
+
+<acceso_metodo> ::= ID PARIZQ <lista_parametros_acceso> PARDER
+                | ID PARIZQ PARDER
+            
+
+<execute> ::= EXECUTE0 <acceso_metodo>
+        
+
+<switch_g> ::= SWITCH PARIZQ <expresion> PARDER <bloque_case>
+        
+
+<bloque_case> ::= LLAVEIZQ <casos> LLAVEDER
+            
+
+<casos> ::= <casos> <caso>
+        | <caso>
+        
+
+<caso> ::= CASE <expresion> DOSPUNTOS <instrucciones>
+        | DEFAULT DOSPUNTOS <instrucciones>
+        
+
+<declaracion_array>::= <tipos_datos> ID  <lista_corchetes_declaracion> ASIGNACION NEW <tipos_datos lista_corchetes_declaracion>
+                | <tipos_datos> ID <lista_corchetes_declaracion> ASIGNACION CORIZQ <lista_corchetes_valores_asignacion> CORDER 
+                
+
+<lista_corchetes_declaracion>::= <lista_corchetes_declaracion> <valor_arreglo>
+                            | <valor_arreglo>
+                            
+
+<valor_arreglo>::= CORIZQ <expresion> CORDER
+                | CORIZQ CORDER 
+            
+
+
+<lista_corchetes_valores> ::= <lista_corchetes_valores> <valor_arreglo>
+                        | <valor_arreglo>
+                        
+
+<lista_corchetes_valores_asignacion> ::= <lista_corchetes_valores_asignacion> COMA <elemento>
+                                        | <elemento>
+                                        
+
+<elemento> ::= <expresion>
+        | CORIZQ <lista_corchetes_valores_asignacion> CORDER
+        
+
+<acceso_array> ::= ID <lista_corchetes_valores>
+
+
+<asignacion_array>::= ID <lista_corchetes_valores> ASIGNACION <expresion>

@@ -168,7 +168,6 @@ instruccion: cout PYC                    { $$ = $1;}
         |declaracion_array PYC { $$ = $1;}
         |asignacion_array PYC { $$ = $1;}
 
-
 ;
 // Para sitetisar un dato, se utiliza $$
 expresion: RES expresion %prec UMINUS  { $$ = new Aritmetica(new Primitivo(0, TipoDatos.ENTERO, false, this._$.first_line, this._$.first_column), $2, OperadorAritmetico.RESTA, lexer.yylineno, lexer.yyleng); } 
@@ -254,7 +253,8 @@ declaracion: tipos_datos lista_ids ASIGNACION expresion { $$ = new Declaracion($
 
 
 asignacion: ID ASIGNACION expresion { $$ = new Asignacion($1, $3, this._$.first_line, this._$.first_column); }
-            ;   
+            ;
+  
 
 ciclo_while: WHILE PARIZQ expresion PARDER bloque { $$ = new CWhile($3, $5, this._$.first_line, this._$.first_column); }
             ;
@@ -348,4 +348,3 @@ acceso_array: ID lista_corchetes_valores { $$ = new Acceso_Arreglos($1, $2, this
 
 ;
 asignacion_array: ID lista_corchetes_valores ASIGNACION expresion { $$ = new Asignacion_Arreglo($1, $2, $4, this._$.first_line, this._$.first_column); }
-                ;

@@ -21,7 +21,7 @@ export class Declaracion extends Instruccion{
         let valor = null
 
         
-
+        console.log("this.expresion",this.expresion)
         if(this.expresion != null){
             valor = this.expresion.interpretar(contexto)  
         }

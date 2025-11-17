@@ -33,6 +33,10 @@ export class CFor extends Instruccion{
                 if (retorno == "continue") {
                     continue;
                 }
+
+                if (retorno == "return"){
+                    return null
+                }
             } else {
 
                 if (retorno?.tipo == TipoDatos.RETURN) {

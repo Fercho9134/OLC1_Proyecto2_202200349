@@ -52,7 +52,6 @@ class AST {
         });
     }
     getConsola() {
-        console.log(this.consola);
         return this.consola.join("");
     }
 }

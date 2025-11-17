@@ -35,6 +35,9 @@ class Switch extends Instruccion_1.Instruccion {
                             console.log("break detectado");
                             return null;
                         }
+                        else if (retorno == "return") {
+                            return null;
+                        }
                     }
                     if ((retorno === null || retorno === void 0 ? void 0 : retorno.tipo) == Resultado_1.TipoDatos.RETURN)
                         return retorno;

@@ -69,7 +69,6 @@ export class AST {
 
 
 public getConsola(){
-    console.log(this.consola)
     return this.consola.join("")
 
 }

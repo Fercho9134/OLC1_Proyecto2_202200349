@@ -24,6 +24,9 @@ class CFor extends Instruccion_1.Instruccion {
                 if (retorno == "continue") {
                     continue;
                 }
+                if (retorno == "return") {
+                    return null;
+                }
             }
             else {
                 if ((retorno === null || retorno === void 0 ? void 0 : retorno.tipo) == Resultado_1.TipoDatos.RETURN) {

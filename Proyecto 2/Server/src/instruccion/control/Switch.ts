@@ -41,6 +41,8 @@ export class Switch extends Instruccion{
                     bandera = true
                     console.log("break detectado")
                     return null
+                    }else if(retorno == "return"){
+                        return null
                     }
                 }
 

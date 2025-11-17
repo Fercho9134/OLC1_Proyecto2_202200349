@@ -31,6 +31,10 @@ export class DoWhile extends Instruccion {
                     continue;
                 }
 
+                if (retorno == "return"){
+                    return null
+                }
+
 
             } else {
 
